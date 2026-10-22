@@ -1,0 +1,13 @@
+{
+  "name": "jac-medialand-monorepo",
+  "version": "1.0.0",
+  "description": "JAC MediaLand IT Solutions — Corporate Website & Separate Admin Portal",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "admin": "npm run dev --prefix admin"
+  },
+  "keywords": [],
+  "author": "JAC MediaLand",
+  "license": "ISC"
+}
