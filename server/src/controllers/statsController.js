@@ -42,6 +42,12 @@ const getDashboardStats = async (req, res, next) => {
     const totalEnquiries = mockStore.enquiries.length;
     const newEnquiries = mockStore.enquiries.filter(e => e.status === 'New').length;
     const recentEnquiries = mockStore.enquiries.slice(0, 5);
+    const totalProducts = mockStore.products.length;
+    const totalOtherServices = mockStore.otherServices.length;
+    const totalTeam = mockStore.teamMembers.length;
+    const totalCareers = mockStore.careers.length;
+    const totalPrograms = mockStore.programs.length;
+    const totalPages = 12;
 
     const serviceCountsMap = {};
     mockStore.enquiries.forEach(e => {
@@ -57,7 +63,13 @@ const getDashboardStats = async (req, res, next) => {
         totalEnquiries,
         newEnquiries,
         recentEnquiries,
-        serviceCounts
+        serviceCounts,
+        totalProducts,
+        totalOtherServices,
+        totalTeam,
+        totalCareers,
+        totalPrograms,
+        totalPages
       }
     });
   } catch (error) {

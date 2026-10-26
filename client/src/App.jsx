@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
+import GlobalModalEscapeHandler from './components/common/GlobalModalEscapeHandler';
 
 // Public Pages
 import HomePage from './pages/HomePage';
@@ -39,6 +40,7 @@ const PublicLayout = () => {
 function App() {
   return (
     <BrowserRouter>
+      <GlobalModalEscapeHandler />
       <ScrollToTop />
       <Routes>
         {/* Public Website Routes */}

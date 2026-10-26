@@ -215,5 +215,79 @@ export const api = {
       headers: getHeaders(true)
     });
     return res.json();
+  },
+
+  // Products
+  getProducts: async () => {
+    const res = await fetch(`${API_BASE}/products`);
+    return res.json();
+  },
+
+  getProductById: async (id) => {
+    const res = await fetch(`${API_BASE}/products/${id}`);
+    return res.json();
+  },
+
+  // Other Services
+  getOtherServices: async () => {
+    const res = await fetch(`${API_BASE}/other-services`);
+    return res.json();
+  },
+
+  getOtherServiceById: async (id) => {
+    const res = await fetch(`${API_BASE}/other-services/${id}`);
+    return res.json();
+  },
+
+  // Team
+  getTeam: async () => {
+    const res = await fetch(`${API_BASE}/team`);
+    return res.json();
+  },
+
+  // Careers & Perks
+  getCareers: async () => {
+    const res = await fetch(`${API_BASE}/careers`);
+    return res.json();
+  },
+
+  getPerks: async () => {
+    const res = await fetch(`${API_BASE}/careers/perks`);
+    return res.json();
+  },
+
+  // Programs
+  getPrograms: async () => {
+    const res = await fetch(`${API_BASE}/programs`);
+    return res.json();
+  },
+
+  getProgramById: async (id) => {
+    const res = await fetch(`${API_BASE}/programs/${id}`);
+    return res.json();
+  },
+
+  // Page Content
+  getPageContent: async (pageKey) => {
+    const res = await fetch(`${API_BASE}/content/${pageKey}`);
+    return res.json();
+  },
+
+  // Industries
+  getIndustries: async () => {
+    const res = await fetch(`${API_BASE}/content/industries`);
+    return res.json();
+  },
+
+  // Process Steps
+  getProcessSteps: async () => {
+    const res = await fetch(`${API_BASE}/content/process`);
+    return res.json();
+  },
+
+  // Client Partner Logos
+  getLogos: async () => {
+    const res = await fetch(`${API_BASE}/logos`);
+    return res.json();
   }
 };

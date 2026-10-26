@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ShieldCheck, Zap, Users2, Trophy } from 'lucide-react';
 
-const storyItems = [
+const defaultStoryItems = [
   {
     id: 1,
     title: 'Relentless Focus on Craft & Performance',
@@ -37,8 +37,12 @@ const storyItems = [
   }
 ];
 
-const StorySection = ({ stats }) => {
-  const [activeTab, setActiveTab] = useState(1);
+const StorySection = ({ stats, homeContent }) => {
+  const storyItems = homeContent?.storyItems && homeContent.storyItems.length > 0 
+    ? homeContent.storyItems 
+    : defaultStoryItems;
+
+  const [activeTab, setActiveTab] = useState(storyItems[0]?.id || 1);
 
   const toggleTab = (id) => {
     setActiveTab((prev) => (prev === id ? null : id));

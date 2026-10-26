@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Star, Eye, X } from 'lucide-react';
 import { api } from '../services/api';
+import ImageUploadDropzone from '../components/ImageUploadDropzone';
 
 const categories = ['Web Development', 'App Development', 'UI/UX Design', 'Digital Marketing', 'Branding', 'SEO'];
 
@@ -48,6 +49,17 @@ const AdminPortfolio = () => {
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        if (isModalOpen) setIsModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
 
   const openCreateModal = () => {
     setEditingProject(null);
@@ -148,20 +160,20 @@ const AdminPortfolio = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-mono uppercase tracking-widest text-amber-300 font-bold block mb-1">
+          <span className="text-xs font-mono uppercase tracking-widest text-neutral-900 font-bold block mb-1">
             Case Studies
           </span>
-          <h1 className="text-3xl font-bold tracking-tight text-white font-sans-tight">
+          <h1 className="text-3xl font-bold tracking-tight text-neutral-950 font-sans-tight">
             Portfolio Management
           </h1>
-          <p className="text-neutral-400 text-sm mt-1">
+          <p className="text-neutral-600 text-sm mt-1">
             Showcase client success stories, challenges, solutions, and measurable metric outcomes.
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-black hover:bg-neutral-800 text-white font-bold text-xs transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Case Study</span>
@@ -171,19 +183,19 @@ const AdminPortfolio = () => {
       {/* Projects List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
-          <div className="col-span-full py-12 text-center text-neutral-400 text-sm">
+          <div className="col-span-full py-12 text-center text-neutral-600 text-sm">
             Loading case studies archive...
           </div>
         ) : (
           projects.map((proj) => (
             <div
               key={proj._id}
-              className="rounded-2xl bg-neutral-900 border border-neutral-800 overflow-hidden flex flex-col justify-between shadow-md"
+              className="rounded-2xl bg-white border border-neutral-200 overflow-hidden flex flex-col justify-between shadow-md"
             >
-              <div className="relative aspect-[16/10] bg-neutral-950">
+              <div className="relative aspect-[16/10] bg-neutral-50">
                 <img src={proj.image} alt={proj.title} className="w-full h-full object-cover" />
                 <div className="absolute top-3 left-3 flex gap-2">
-                  <span className="bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                  <span className="bg-black/40 backdrop-blur-md text-neutral-950 text-[10px] font-bold px-2.5 py-1 rounded-full">
                     {proj.category}
                   </span>
                 </div>
@@ -191,8 +203,8 @@ const AdminPortfolio = () => {
                   onClick={() => toggleFeatured(proj)}
                   className={`absolute top-3 right-3 p-1.5 rounded-full backdrop-blur-md transition-colors cursor-pointer ${
                     proj.isFeatured
-                      ? 'bg-amber-400 text-black'
-                      : 'bg-black/60 text-neutral-400 hover:text-white'
+                      ? 'bg-black text-white'
+                      : 'bg-black/60 text-neutral-600 hover:text-neutral-950'
                   }`}
                   title={proj.isFeatured ? 'Featured on Home' : 'Click to feature on Home'}
                 >
@@ -205,18 +217,18 @@ const AdminPortfolio = () => {
                   <span className="text-[10px] font-mono uppercase text-neutral-500 block mb-1">
                     Client: {proj.client} • {proj.year}
                   </span>
-                  <h3 className="text-lg font-bold text-white mb-2">{proj.title}</h3>
-                  <p className="text-xs text-neutral-400 line-clamp-2 mb-4 leading-relaxed">
+                  <h3 className="text-lg font-bold text-neutral-950 mb-2">{proj.title}</h3>
+                  <p className="text-xs text-neutral-600 line-clamp-2 mb-4 leading-relaxed">
                     {proj.summary}
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-neutral-800">
+                <div className="flex items-center justify-between pt-4 border-t border-neutral-200">
                   <span className="text-xs font-mono text-neutral-500">Slug: /{proj.slug}</span>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => openEditModal(proj)}
-                      className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 cursor-pointer"
+                      className="p-2 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-700 cursor-pointer"
                       title="Edit Project"
                     >
                       <Edit2 className="w-4 h-4" />
@@ -238,15 +250,20 @@ const AdminPortfolio = () => {
 
       {/* Modal for Project Create/Edit */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-neutral-800 mb-6">
-              <h3 className="text-xl font-bold text-white">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false);
+          }}
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-xs"
+        >
+          <div className="w-full max-w-2xl bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-4 border-b border-neutral-200 mb-6">
+              <h3 className="text-xl font-bold text-neutral-950">
                 {editingProject ? `Edit Case Study: ${editingProject.title}` : 'Create New Case Study'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 rounded-xl bg-neutral-800 text-neutral-400 hover:text-white"
+                className="p-2 rounded-xl bg-neutral-100 text-neutral-600 hover:text-neutral-950"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -255,36 +272,36 @@ const AdminPortfolio = () => {
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-neutral-300 font-semibold block mb-1">Project Title *</label>
+                  <label className="text-neutral-700 font-semibold block mb-1">Project Title *</label>
                   <input
                     type="text"
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g. AuraPay FinTech Wallet"
-                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                   />
                 </div>
 
                 <div>
-                  <label className="text-neutral-300 font-semibold block mb-1">Client Name</label>
+                  <label className="text-neutral-700 font-semibold block mb-1">Client Name</label>
                   <input
                     type="text"
                     value={formData.client}
                     onChange={(e) => setFormData({ ...formData, client: e.target.value })}
                     placeholder="e.g. AuraPay Global"
-                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-neutral-300 font-semibold block mb-1">Category *</label>
+                  <label className="text-neutral-700 font-semibold block mb-1">Category *</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                   >
                     {categories.map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -293,118 +310,114 @@ const AdminPortfolio = () => {
                 </div>
 
                 <div>
-                  <label className="text-neutral-300 font-semibold block mb-1">Year</label>
+                  <label className="text-neutral-700 font-semibold block mb-1">Year</label>
                   <input
                     type="text"
                     value={formData.year}
                     onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                     placeholder="2025"
-                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-neutral-300 font-semibold block mb-1">Executive Summary *</label>
+                <label className="text-neutral-700 font-semibold block mb-1">Executive Summary *</label>
                 <textarea
                   required
                   rows="2"
                   value={formData.summary}
                   onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
                   placeholder="High-level overview of the product..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                 />
               </div>
 
               <div>
-                <label className="text-neutral-300 font-semibold block mb-1">The Challenge</label>
+                <label className="text-neutral-700 font-semibold block mb-1">The Challenge</label>
                 <textarea
                   rows="3"
                   value={formData.challenge}
                   onChange={(e) => setFormData({ ...formData, challenge: e.target.value })}
                   placeholder="Key technical and design friction points..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                 />
               </div>
 
               <div>
-                <label className="text-neutral-300 font-semibold block mb-1">The Solution</label>
+                <label className="text-neutral-700 font-semibold block mb-1">The Solution</label>
                 <textarea
                   rows="3"
                   value={formData.solution}
                   onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
                   placeholder="How JAC MediaLand designed & built the architecture..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                 />
               </div>
 
               <div>
-                <label className="text-neutral-300 font-semibold block mb-1">Metric Results (Format: Metric: Label, Metric: Label)</label>
+                <label className="text-neutral-700 font-semibold block mb-1">Metric Results (Format: Metric: Label, Metric: Label)</label>
                 <input
                   type="text"
                   value={formData.results}
                   onChange={(e) => setFormData({ ...formData, results: e.target.value })}
                   placeholder="99.99%: Uptime, 250K+: Active Users, 3.4x: Retention"
-                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                 />
               </div>
 
               <div>
-                <label className="text-neutral-300 font-semibold block mb-1">Tech Stack (Comma-separated)</label>
+                <label className="text-neutral-700 font-semibold block mb-1">Tech Stack (Comma-separated)</label>
                 <input
                   type="text"
                   value={formData.techStack}
                   onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
                   placeholder="React, Next.js, Node.js, Stripe, Tailwind"
-                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
+                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm focus:outline-none focus:border-amber-300"
                 />
               </div>
 
-              <div>
-                <label className="text-neutral-300 font-semibold block mb-1">Cover Image URL</label>
-                <input
-                  type="url"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-neutral-950 border border-neutral-800 text-white text-sm focus:outline-none focus:border-amber-300"
-                />
-              </div>
+              <ImageUploadDropzone
+                label="Project Cover Image"
+                value={formData.image}
+                onChange={(newImg) => setFormData({ ...formData, image: newImg })}
+                hint="Drag & drop project mockup or screenshot, or enter URL"
+              />
 
               <div className="flex items-center gap-6 pt-2">
-                <label className="flex items-center gap-2 cursor-pointer text-neutral-300">
+                <label className="flex items-center gap-2 cursor-pointer text-neutral-700">
                   <input
                     type="checkbox"
                     checked={formData.isFeatured}
                     onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                    className="w-4 h-4 rounded text-amber-400 bg-neutral-950 border-neutral-800"
+                    className="w-4 h-4 rounded text-neutral-950 bg-neutral-50 border-neutral-200"
                   />
                   <span>Feature on Homepage</span>
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer text-neutral-300">
+                <label className="flex items-center gap-2 cursor-pointer text-neutral-700">
                   <input
                     type="checkbox"
                     checked={formData.isPublished}
                     onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
-                    className="w-4 h-4 rounded text-amber-400 bg-neutral-950 border-neutral-800"
+                    className="w-4 h-4 rounded text-neutral-950 bg-neutral-50 border-neutral-200"
                   />
                   <span>Published & Live</span>
                 </label>
               </div>
 
-              <div className="flex justify-end gap-3 pt-6 border-t border-neutral-800">
+              <div className="flex justify-end gap-3 pt-6 border-t border-neutral-200">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl bg-neutral-800 text-neutral-300 hover:bg-neutral-700 cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold cursor-pointer disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-xl bg-black hover:bg-neutral-800 text-white font-bold cursor-pointer disabled:opacity-50"
                 >
                   {saving ? 'Saving...' : editingProject ? 'Update Project' : 'Create Project'}
                 </button>

@@ -215,5 +215,335 @@ export const api = {
       headers: getHeaders(true)
     });
     return res.json();
+  },
+
+  // Products
+  getProducts: async () => {
+    const res = await fetch(`${API_BASE}/products`);
+    return res.json();
+  },
+
+  getAllProductsAdmin: async () => {
+    const res = await fetch(`${API_BASE}/products/admin/all`, {
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  getProductById: async (id) => {
+    const res = await fetch(`${API_BASE}/products/${id}`);
+    return res.json();
+  },
+
+  createProduct: async (productData) => {
+    const res = await fetch(`${API_BASE}/products`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(productData)
+    });
+    return res.json();
+  },
+
+  updateProduct: async (id, productData) => {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(productData)
+    });
+    return res.json();
+  },
+
+  deleteProduct: async (id) => {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  // Other Services
+  getOtherServices: async () => {
+    const res = await fetch(`${API_BASE}/other-services`);
+    return res.json();
+  },
+
+  getAllOtherServicesAdmin: async () => {
+    const res = await fetch(`${API_BASE}/other-services/admin/all`, {
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  createOtherService: async (data) => {
+    const res = await fetch(`${API_BASE}/other-services`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  updateOtherService: async (id, data) => {
+    const res = await fetch(`${API_BASE}/other-services/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  deleteOtherService: async (id) => {
+    const res = await fetch(`${API_BASE}/other-services/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  // Team
+  getTeam: async () => {
+    const res = await fetch(`${API_BASE}/team`);
+    return res.json();
+  },
+
+  getAllTeamAdmin: async () => {
+    const res = await fetch(`${API_BASE}/team/admin/all`, {
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  createTeamMember: async (data) => {
+    const res = await fetch(`${API_BASE}/team`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  updateTeamMember: async (id, data) => {
+    const res = await fetch(`${API_BASE}/team/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  deleteTeamMember: async (id) => {
+    const res = await fetch(`${API_BASE}/team/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  // Careers (Jobs & Perks)
+  getCareers: async () => {
+    const res = await fetch(`${API_BASE}/careers`);
+    return res.json();
+  },
+
+  getAllCareersAdmin: async () => {
+    const res = await fetch(`${API_BASE}/careers/admin/all`, {
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  createJob: async (data) => {
+    const res = await fetch(`${API_BASE}/careers`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  updateJob: async (id, data) => {
+    const res = await fetch(`${API_BASE}/careers/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  deleteJob: async (id) => {
+    const res = await fetch(`${API_BASE}/careers/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  getPerks: async () => {
+    const res = await fetch(`${API_BASE}/careers/perks`);
+    return res.json();
+  },
+
+  createPerk: async (data) => {
+    const res = await fetch(`${API_BASE}/careers/perks`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  updatePerk: async (id, data) => {
+    const res = await fetch(`${API_BASE}/careers/perks/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  deletePerk: async (id) => {
+    const res = await fetch(`${API_BASE}/careers/perks/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  // Programs
+  getPrograms: async () => {
+    const res = await fetch(`${API_BASE}/programs`);
+    return res.json();
+  },
+
+  getProgramById: async (id) => {
+    const res = await fetch(`${API_BASE}/programs/${id}`);
+    return res.json();
+  },
+
+  createProgram: async (data) => {
+    const res = await fetch(`${API_BASE}/programs`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  updateProgram: async (id, data) => {
+    const res = await fetch(`${API_BASE}/programs/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  deleteProgram: async (id) => {
+    const res = await fetch(`${API_BASE}/programs/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  // Page Content (Home, About, Legal, etc.)
+  getPageContent: async (pageKey) => {
+    const res = await fetch(`${API_BASE}/content/${pageKey}`);
+    return res.json();
+  },
+
+  updatePageContent: async (pageKey, data) => {
+    const res = await fetch(`${API_BASE}/content/${pageKey}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  // Industries
+  getIndustries: async () => {
+    const res = await fetch(`${API_BASE}/content/industries`);
+    return res.json();
+  },
+
+  createIndustry: async (data) => {
+    const res = await fetch(`${API_BASE}/content/industries`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  updateIndustry: async (id, data) => {
+    const res = await fetch(`${API_BASE}/content/industries/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  deleteIndustry: async (id) => {
+    const res = await fetch(`${API_BASE}/content/industries/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  // Process Steps
+  getProcessSteps: async () => {
+    const res = await fetch(`${API_BASE}/content/process`);
+    return res.json();
+  },
+
+  updateProcessStep: async (id, data) => {
+    const res = await fetch(`${API_BASE}/content/process/step/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  // Client Partner Logos
+  getLogos: async () => {
+    const res = await fetch(`${API_BASE}/logos`);
+    return res.json();
+  },
+
+  getAllLogosAdmin: async () => {
+    const res = await fetch(`${API_BASE}/logos/admin/all`, {
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  createLogo: async (data) => {
+    const res = await fetch(`${API_BASE}/logos`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  updateLogo: async (id, data) => {
+    const res = await fetch(`${API_BASE}/logos/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  },
+
+  deleteLogo: async (id) => {
+    const res = await fetch(`${API_BASE}/logos/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
   }
 };

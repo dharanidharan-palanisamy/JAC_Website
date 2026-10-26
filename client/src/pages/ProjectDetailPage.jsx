@@ -108,7 +108,7 @@ const ProjectDetailPage = () => {
       </section>
 
       {/* Hero Showcase Image */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 -mt-10 sm:-mt-16 relative z-20">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 -mt-10 sm:-mt-16 relative z-20">
         <div className="rounded-3xl overflow-hidden shadow-2xl bg-neutral-900 aspect-[16/9] border border-white/40">
           <img
             src={project.image}

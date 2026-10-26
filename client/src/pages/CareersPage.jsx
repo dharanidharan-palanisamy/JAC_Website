@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Briefcase,
@@ -16,8 +16,9 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 import CTASection from '../components/home/CTASection';
+import { api } from '../services/api';
 
-const perks = [
+const defaultPerks = [
   {
     icon: Laptop,
     title: 'Top-Tier Hardware',
@@ -40,7 +41,7 @@ const perks = [
   }
 ];
 
-const openJobs = [
+const defaultOpenJobs = [
   {
     id: 'fullstack-sr',
     title: 'Senior Full-Stack Engineer',
@@ -129,7 +130,17 @@ const openJobs = [
   }
 ];
 
+const perkIconMap = {
+  Laptop,
+  HeartHandshake,
+  GraduationCap,
+  Smile,
+  Sparkles
+};
+
 const CareersPage = () => {
+  const [openJobs, setOpenJobs] = useState(defaultOpenJobs);
+  const [perks, setPerks] = useState(defaultPerks);
   const [selectedDept, setSelectedDept] = useState('All');
   const [applyingJob, setApplyingJob] = useState(null);
   const [appliedSuccess, setAppliedSuccess] = useState(false);
@@ -141,11 +152,31 @@ const CareersPage = () => {
     coverNote: ''
   });
 
-  const departments = ['All', 'Engineering', 'Design', 'Mobile', 'Infrastructure'];
+  useEffect(() => {
+    const loadCareers = async () => {
+      try {
+        const [jobsRes, perksRes] = await Promise.all([
+          api.getCareers(),
+          api.getPerks()
+        ]);
+        if (jobsRes.success && jobsRes.data && jobsRes.data.length > 0) {
+          setOpenJobs(jobsRes.data);
+        }
+        if (perksRes.success && perksRes.data && perksRes.data.length > 0) {
+          setPerks(perksRes.data);
+        }
+      } catch (err) {
+        console.error('Failed to load careers from API, using fallback:', err);
+      }
+    };
+    loadCareers();
+  }, []);
+
+  const departments = ['All', 'Engineering', 'Design', 'Mobile', 'Cloud & Infrastructure'];
 
   const filteredJobs = selectedDept === 'All'
     ? openJobs
-    : openJobs.filter((j) => j.department === selectedDept);
+    : openJobs.filter((j) => (j.department || '').toLowerCase().includes(selectedDept.toLowerCase()));
 
   const handleSubmitApplication = (e) => {
     e.preventDefault();
@@ -204,7 +235,7 @@ const CareersPage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {perks.map((p, idx) => {
-              const Icon = p.icon;
+              const Icon = typeof p.icon === 'string' ? (perkIconMap[p.icon] || Sparkles) : (p.icon || Sparkles);
               return (
                 <div
                   key={idx}

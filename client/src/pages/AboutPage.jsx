@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Code, Cpu, Shield, Sparkles, Award, Globe2, Target, ArrowUpRight, Briefcase } from 'lucide-react';
 import CTASection from '../components/home/CTASection';
+import { api } from '../services/api';
 
-const teamMembers = [
+const defaultTeamMembers = [
   {
     name: 'Anand Jayaraj',
     role: 'Founder & Managing Director',
@@ -48,7 +49,7 @@ const teamMembers = [
   }
 ];
 
-const coreValues = [
+const defaultCoreValues = [
   {
     icon: Code,
     title: 'Zero Compromise on Craft',
@@ -71,6 +72,16 @@ const coreValues = [
   }
 ];
 
+const aboutIconMap = {
+  Code,
+  Sparkles,
+  Cpu,
+  Shield,
+  Award,
+  Globe2,
+  Target
+};
+
 const teamStrengths = [
   { title: 'Full-Stack Developers', count: '14+', desc: 'Specializing in React, Next.js, Node.js, Python, PostgreSQL and Cloud' },
   { title: 'Mobile Engineers', count: '6+', desc: 'Native & cross-platform Flutter and React Native specialists' },
@@ -79,22 +90,49 @@ const teamStrengths = [
 ];
 
 const AboutPage = () => {
+  const [teamMembers, setTeamMembers] = useState(defaultTeamMembers);
+  const [coreValues, setCoreValues] = useState(defaultCoreValues);
+  const [content, setContent] = useState(null);
+
+  useEffect(() => {
+    const loadAboutData = async () => {
+      try {
+        const [tRes, cRes] = await Promise.all([
+          api.getTeam(),
+          api.getPageContent('about')
+        ]);
+        if (tRes.success && tRes.data && tRes.data.length > 0) {
+          setTeamMembers(tRes.data);
+        }
+        if (cRes.success && cRes.data) {
+          setContent(cRes.data);
+          if (cRes.data.coreValues && cRes.data.coreValues.length > 0) {
+            setCoreValues(cRes.data.coreValues);
+          }
+        }
+      } catch (err) {
+        console.error('Error loading about page data:', err);
+      }
+    };
+    loadAboutData();
+  }, []);
+
   return (
     <div className="w-full">
       {/* Hero Section */}
       <section className="nutz-hero-gradient min-h-[calc(100vh-80px)] flex items-center justify-center text-center px-4 sm:px-6 py-16">
         <div className="max-w-4xl mx-auto">
           <span className="font-serif-italic text-2xl sm:text-3xl text-neutral-800 block mb-4">
-            About JAC MediaLand
+            {content?.heroEyebrow || 'About JAC MediaLand'}
           </span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-6 font-sans-tight">
-            We exist to help ambitious brands{' '}
+            {content?.heroHeading || 'We exist to help ambitious brands'}{' '}
             <span className="font-serif-italic font-normal block sm:inline">
-              dominate the digital world.
+              {content?.heroHeadingItalic || 'dominate the digital world.'}
             </span>
           </h1>
           <p className="text-neutral-700 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto">
-            Founded with a vision to merge cutting-edge software engineering with award-winning creative design, JAC MediaLand is a full-service technology agency delivering transformative solutions across India and internationally.
+            {content?.heroDescription || 'Founded with a vision to merge cutting-edge software engineering with award-winning creative design, JAC MediaLand is a full-service technology agency delivering transformative solutions across India and internationally.'}
           </p>
         </div>
       </section>
@@ -186,7 +224,7 @@ const AboutPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {coreValues.map((val, idx) => {
-              const Icon = val.icon;
+              const Icon = typeof val.icon === 'string' ? (aboutIconMap[val.icon] || Sparkles) : (val.icon || Sparkles);
               return (
                 <div
                   key={idx}

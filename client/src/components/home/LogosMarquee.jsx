@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { api } from '../../services/api';
 
-const clientLogos = [
+const defaultClientLogos = [
   { id: 1, src: '/Logos/optimized/1.png', alt: 'Client Partner 1' },
   { id: 2, src: '/Logos/optimized/2.png', alt: 'Client Partner 2' },
   { id: 3, src: '/Logos/optimized/3.png', alt: 'Client Partner 3' },
@@ -17,10 +18,29 @@ const clientLogos = [
   { id: 14, src: '/Logos/optimized/14.png', alt: 'Client Partner 14' },
 ];
 
-const row1Logos = clientLogos;
-const row2Logos = [...clientLogos].reverse();
-
 const LogosMarquee = () => {
+  const [logos, setLogos] = useState(defaultClientLogos);
+
+  useEffect(() => {
+    const fetchLogos = async () => {
+      try {
+        const res = await api.getLogos();
+        if (res.success && res.data && res.data.length > 0) {
+          setLogos(res.data.map((l) => ({
+            id: l.id || l._id,
+            src: l.src,
+            alt: l.name || 'Client Partner'
+          })));
+        }
+      } catch (err) {
+        console.error('Error fetching partner logos from API, using default fallback:', err);
+      }
+    };
+    fetchLogos();
+  }, []);
+
+  const row1Logos = logos;
+  const row2Logos = [...logos].reverse();
   return (
     <section className="py-14 sm:py-20 bg-[#FBFBFA] border-y border-neutral-200/60 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 text-center mb-12 sm:mb-14">

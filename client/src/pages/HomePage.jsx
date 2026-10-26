@@ -15,22 +15,25 @@ const HomePage = () => {
   const [projects, setProjects] = useState([]);
   const [faqs, setFaqs] = useState([]);
   const [settings, setSettings] = useState(null);
+  const [homeContent, setHomeContent] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadHomeData = async () => {
       try {
-        const [srvRes, projRes, faqRes, setRes] = await Promise.all([
+        const [srvRes, projRes, faqRes, setRes, contentRes] = await Promise.all([
           api.getServices(),
           api.getProjects({ featured: 'true' }),
           api.getFAQs(),
-          api.getSettings()
+          api.getSettings(),
+          api.getPageContent('home')
         ]);
 
         if (srvRes.success) setServices(srvRes.data);
         if (projRes.success) setProjects(projRes.data);
         if (faqRes.success) setFaqs(faqRes.data);
         if (setRes.success) setSettings(setRes.data);
+        if (contentRes.success) setHomeContent(contentRes.data);
       } catch (err) {
         console.error('Error fetching home page data:', err);
       } finally {
@@ -43,9 +46,9 @@ const HomePage = () => {
 
   return (
     <div className="w-full">
-      <HeroSection settings={settings} />
+      <HeroSection settings={settings} homeContent={homeContent} />
       <LogosMarquee />
-      <StorySection stats={settings?.stats} />
+      <StorySection stats={settings?.stats} homeContent={homeContent} />
       <ServicesShowcase services={services} />
       <IndustriesSection />
       <FeaturedProjects projects={projects} />

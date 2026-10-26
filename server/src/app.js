@@ -56,6 +56,13 @@ app.use('/api/enquiries', require('./routes/enquiryRoutes'));
 app.use('/api/settings', require('./routes/settingsRoutes'));
 app.use('/api/faqs', require('./routes/faqRoutes'));
 app.use('/api/stats', require('./routes/statsRoutes'));
+app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/other-services', require('./routes/otherServiceRoutes'));
+app.use('/api/team', require('./routes/teamRoutes'));
+app.use('/api/careers', require('./routes/careerRoutes'));
+app.use('/api/programs', require('./routes/programRoutes'));
+app.use('/api/content', require('./routes/contentRoutes'));
+app.use('/api/logos', require('./routes/logoRoutes'));
 
 // 404 handler for unknown API routes
 app.use('/api/*', (req, res) => {

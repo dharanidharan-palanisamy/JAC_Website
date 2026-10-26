@@ -23,8 +23,24 @@ import { api } from '../services/api';
 const ProgramDetailPage = () => {
   const { id } = useParams();
   
-  // Find program by id or slug
-  const program = programsData.find((p) => p.id === id || p.slug === id);
+  // Find program by id or slug with API fetch and fallback
+  const [program, setProgram] = useState(() => programsData.find((p) => p.id === id || p.slug === id) || null);
+
+  useEffect(() => {
+    const loadProg = async () => {
+      try {
+        const res = await api.getProgramById(id);
+        if (res.success && res.data) {
+          setProgram(res.data);
+        }
+      } catch (err) {
+        // Fallback to static data
+        const local = programsData.find((p) => p.id === id || p.slug === id);
+        if (local) setProgram(local);
+      }
+    };
+    loadProg();
+  }, [id]);
 
   // Inquiry modal / inline form state
   const [formData, setFormData] = useState({

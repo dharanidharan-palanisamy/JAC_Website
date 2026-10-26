@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Wind,
@@ -22,8 +22,9 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { api } from '../../services/api';
 
-const industries = [
+const defaultIndustries = [
   {
     title: 'Agriculture',
     subtitle: 'SOLUTIONS & TECH',
@@ -106,8 +107,42 @@ const industries = [
   }
 ];
 
+const indIconMap = {
+  Wind,
+  DollarSign,
+  Droplet,
+  Wrench,
+  BookOpen,
+  Heart,
+  Shield,
+  Truck,
+  Video,
+  Users,
+  Home,
+  ShoppingBag,
+  Flag,
+  Globe,
+  Award,
+  Map
+};
+
 const IndustriesSection = () => {
+  const [industries, setIndustries] = useState(defaultIndustries);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const loadIndustries = async () => {
+      try {
+        const res = await api.getIndustries();
+        if (res.success && res.data && res.data.length > 0) {
+          setIndustries(res.data.filter((i) => i.isActive !== false));
+        }
+      } catch (err) {
+        console.error('Failed to load industries from API, using default:', err);
+      }
+    };
+    loadIndustries();
+  }, []);
 
   return (
     <section className="py-24 sm:py-32 bg-white relative overflow-hidden">
@@ -133,12 +168,12 @@ const IndustriesSection = () => {
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5"
         >
           {industries.map((item, index) => {
-            const Icon = item.icon;
+            const Icon = typeof item.icon === 'string' ? (indIconMap[item.icon] || Wind) : (item.icon || Wind);
             const isActive = activeIndex === index;
 
             return (
               <motion.div
-                key={item.title}
+                key={item.title || index}
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}

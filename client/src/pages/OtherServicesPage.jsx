@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Cloud,
@@ -16,8 +16,9 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import CTASection from '../components/home/CTASection';
+import { api } from '../services/api';
 
-const otherServices = [
+const defaultOtherServices = [
   {
     id: 'cloud-devops',
     title: 'Cloud Architecture & DevOps',
@@ -122,7 +123,18 @@ const otherServices = [
   }
 ];
 
+const otherIconMap = {
+  Cloud,
+  Cpu,
+  ShieldCheck,
+  Server,
+  TestTube2,
+  Headphones,
+  Sparkles
+};
+
 const OtherServicesPage = () => {
+  const [services, setServices] = useState(defaultOtherServices);
   const [selectedService, setSelectedService] = useState(null);
   const [inquirySuccess, setInquirySuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -132,6 +144,20 @@ const OtherServicesPage = () => {
     company: '',
     message: ''
   });
+
+  useEffect(() => {
+    const loadServices = async () => {
+      try {
+        const res = await api.getOtherServices();
+        if (res.success && res.data && res.data.length > 0) {
+          setServices(res.data);
+        }
+      } catch (err) {
+        console.error('Failed to load other services, using default:', err);
+      }
+    };
+    loadServices();
+  }, []);
 
   const handleInquirySubmit = (e) => {
     e.preventDefault();
@@ -195,11 +221,12 @@ const OtherServicesPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {otherServices.map((service) => {
-              const Icon = service.icon;
+            {services.map((service, idx) => {
+              const Icon = typeof service.icon === 'string' ? (otherIconMap[service.icon] || Sparkles) : (service.icon || Sparkles);
+              const sKey = service._id || service.id || idx;
               return (
                 <div
-                  key={service.id}
+                  key={sKey}
                   className="group rounded-3xl bg-white border border-neutral-200/80 p-8 shadow-xs hover:shadow-2xl transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>

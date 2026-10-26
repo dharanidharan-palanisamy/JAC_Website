@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Check, Sparkles, Layers, ShieldCheck, Zap, BarChart3, Database } from 'lucide-react';
 import CTASection from '../components/home/CTASection';
+import { api } from '../services/api';
 
-const products = [
+const defaultProducts = [
   {
     id: 'jac-nexus-erp',
     name: 'JAC Nexus ERP',
@@ -78,7 +79,32 @@ const products = [
   }
 ];
 
+const iconMap = {
+  Layers,
+  Zap,
+  BarChart3,
+  Database,
+  ShieldCheck,
+  Sparkles
+};
+
 const ProductsPage = () => {
+  const [products, setProducts] = useState(defaultProducts);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const res = await api.getProducts();
+        if (res.success && res.data && res.data.length > 0) {
+          setProducts(res.data);
+        }
+      } catch (err) {
+        console.error('Failed to load products from API, using fallback:', err);
+      }
+    };
+    loadProducts();
+  }, []);
+
   return (
     <div className="w-full">
       {/* Products Hero */}
@@ -103,13 +129,14 @@ const ProductsPage = () => {
       <section className="pt-4 pb-20 sm:pt-6 sm:pb-24 bg-[#FBFBFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
           {products.map((product, idx) => {
-            const Icon = product.icon;
+            const Icon = typeof product.icon === 'string' ? (iconMap[product.icon] || Layers) : (product.icon || Layers);
             const isReversed = idx % 2 === 1;
+            const prodKey = product._id || product.id || idx;
 
             return (
               <div
-                key={product.id}
-                id={product.id}
+                key={prodKey}
+                id={product.slug || product.id}
                 className={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center scroll-mt-24 ${
                   isReversed ? 'lg:flex-row-reverse' : ''
                 }`}
@@ -119,9 +146,11 @@ const ProductsPage = () => {
                     <span className="text-xs uppercase font-mono font-bold tracking-wider px-3 py-1 rounded-full bg-neutral-200/80 text-neutral-800">
                       {product.category}
                     </span>
-                    <span className="text-xs uppercase font-mono font-bold tracking-wider px-3 py-1 rounded-full bg-amber-400 text-black">
-                      {product.badge}
-                    </span>
+                    {product.badge && (
+                      <span className="text-xs uppercase font-mono font-bold tracking-wider px-3 py-1 rounded-full bg-amber-400 text-black">
+                        {product.badge}
+                      </span>
+                    )}
                   </div>
 
                   <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight font-sans-tight mb-3">
@@ -135,16 +164,18 @@ const ProductsPage = () => {
                     {product.description}
                   </p>
 
-                  <div className="space-y-3 mb-8">
-                    {product.features.map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-start gap-3">
-                        <div className="w-5 h-5 rounded-full bg-neutral-900 text-amber-300 flex items-center justify-center shrink-0 mt-0.5">
-                          <Check className="w-3 h-3" />
+                  {product.features && product.features.length > 0 && (
+                    <div className="space-y-3 mb-8">
+                      {product.features.map((feat, fIdx) => (
+                        <div key={fIdx} className="flex items-start gap-3">
+                          <div className="w-5 h-5 rounded-full bg-neutral-900 text-amber-300 flex items-center justify-center shrink-0 mt-0.5">
+                            <Check className="w-3 h-3" />
+                          </div>
+                          <span className="text-sm text-neutral-700 font-medium">{feat}</span>
                         </div>
-                        <span className="text-sm text-neutral-700 font-medium">{feat}</span>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
 
                   <div className="flex items-center gap-4">
                     <Link
@@ -154,14 +185,16 @@ const ProductsPage = () => {
                       <span>Request a Demo</span>
                       <ArrowRight className="w-4 h-4" />
                     </Link>
-                    <div className="pl-4 border-l border-neutral-300">
-                      <span className="text-2xl font-extrabold text-neutral-900 block leading-none">
-                        {product.stats.metric}
-                      </span>
-                      <span className="text-[11px] text-neutral-500 font-medium">
-                        {product.stats.label}
-                      </span>
-                    </div>
+                    {product.stats?.metric && (
+                      <div className="pl-4 border-l border-neutral-300">
+                        <span className="text-2xl font-extrabold text-neutral-900 block leading-none">
+                          {product.stats.metric}
+                        </span>
+                        <span className="text-[11px] text-neutral-500 font-medium">
+                          {product.stats.label}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 

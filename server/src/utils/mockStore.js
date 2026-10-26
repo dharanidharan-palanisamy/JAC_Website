@@ -437,11 +437,836 @@ let settings = {
   }
 };
 
+let products = [
+  {
+    _id: 'prod-1',
+    name: 'JAC Nexus ERP',
+    slug: 'jac-nexus-erp',
+    tagline: 'Intelligent Enterprise Resource Planning',
+    category: 'Enterprise SaaS',
+    badge: 'Flagship Platform',
+    description: 'A unified operations operating system designed for mid-market and enterprise businesses. Seamlessly manages inventory, automated financial accounting, human resources, and supply chain logistics.',
+    icon: 'Layers',
+    color: 'from-amber-500/20 to-orange-500/10',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+    features: [
+      'Multi-entity accounting and automated tax compliance',
+      'Real-time inventory sync across multiple warehouses',
+      'Role-based granular access control & SOC2 compliant audit logs',
+      'Custom workflow automation and API webhook integrations'
+    ],
+    stats: { metric: '42%', label: 'Efficiency Improvement' },
+    order: 1,
+    isActive: true
+  },
+  {
+    _id: 'prod-2',
+    name: 'JAC PayFlow',
+    slug: 'jac-payflow',
+    tagline: 'High-Throughput Global Payments Gateway',
+    category: 'FinTech Solution',
+    badge: 'Sub-50ms Processing',
+    description: 'Enterprise payment infrastructure built for mission-critical e-commerce and subscription platforms. Processes transactions in 135+ currencies with automated fraud detection and smart retry logic.',
+    icon: 'Zap',
+    color: 'from-emerald-500/20 to-teal-500/10',
+    image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80',
+    features: [
+      'Universal checkout widget with 1-click payment credentials',
+      'Recurring billing, prorated subscriptions & dunning management',
+      'AI-powered fraud risk scoring reducing chargebacks by 68%',
+      'Direct reconciliation integration with QuickBooks & SAP'
+    ],
+    stats: { metric: '99.99%', label: 'Uptime Reliability' },
+    order: 2,
+    isActive: true
+  },
+  {
+    _id: 'prod-3',
+    name: 'JAC Pulse CRM',
+    slug: 'jac-pulse-crm',
+    tagline: 'Omnichannel Client Engagement & Pipeline Intelligence',
+    category: 'Growth & CRM',
+    badge: 'AI Enabled',
+    description: 'Empower your sales and customer success teams with automated lead capture, predictive deal scoring, unified email/WhatsApp sequences, and real-time revenue forecasting.',
+    icon: 'BarChart3',
+    color: 'from-blue-500/20 to-cyan-500/10',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
+    features: [
+      'Automated lead qualification and intelligent routing',
+      'Unified inbox connecting WhatsApp, Email, and SMS',
+      'Visual drag-and-drop pipeline with stage probability analytics',
+      'Automated email nurture sequences and trigger-based tasks'
+    ],
+    stats: { metric: '3.4x', label: 'Faster Deal Velocity' },
+    order: 3,
+    isActive: true
+  },
+  {
+    _id: 'prod-4',
+    name: 'JAC CloudDesk',
+    slug: 'jac-clouddesk',
+    tagline: 'Zero-Trust Secure Enterprise Workspace',
+    category: 'Cloud Infrastructure',
+    badge: 'Zero-Trust',
+    description: 'Encrypted document collaboration, digital contract signing, and virtual workspaces built for distributed enterprise teams with end-to-end cryptographic confidentiality.',
+    icon: 'Database',
+    color: 'from-neutral-800/10 to-neutral-700/5',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
+    features: [
+      'AES-256 military-grade client-side file encryption',
+      'Legally binding digital signature workflows',
+      'Granular permission expiration and watermark protection',
+      'Instant cloud syncing with offline caching'
+    ],
+    stats: { metric: '100%', label: 'Compliance Audit Pass' },
+    order: 4,
+    isActive: true
+  }
+];
+
+let otherServices = [
+  {
+    _id: 'os-1',
+    title: 'Cloud Architecture & DevOps',
+    slug: 'cloud-devops',
+    category: 'Infrastructure',
+    badge: '99.99% SLA',
+    icon: 'Cloud',
+    tagline: 'High-availability cloud migrations, automated CI/CD pipelines & container orchestration.',
+    description: 'We design and manage resilient cloud infrastructure across AWS, Google Cloud, and Microsoft Azure. Our engineers implement automated zero-downtime deployment workflows, auto-scaling clusters, and cost-optimized serverless architectures.',
+    deliverables: [
+      'Multi-cloud architecture design & migration roadmap',
+      'Docker containerization & Kubernetes (EKS/GKE) orchestration',
+      'Automated CI/CD deployment pipelines (GitHub Actions, GitLab)',
+      'Infrastructure as Code (Terraform, Ansible & Pulumi)',
+      'Cloud spend audit & automated resource optimization'
+    ],
+    techStack: ['AWS', 'Google Cloud', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions'],
+    order: 1,
+    isActive: true
+  },
+  {
+    _id: 'os-2',
+    title: 'AI & Intelligent Automation',
+    slug: 'ai-machine-learning',
+    category: 'Next-Gen Tech',
+    badge: 'AI Enabled',
+    icon: 'Cpu',
+    tagline: 'Custom LLM agents, predictive data pipelines & business process automation.',
+    description: 'Transform manual enterprise workflows into lightning-fast automated systems. From conversational AI copilots and semantic document extraction to custom machine learning models for customer churn and demand forecasting.',
+    deliverables: [
+      'Private enterprise LLM integration & vector search (RAG)',
+      'Custom conversational support agents & WhatsApp AI bots',
+      'Intelligent document parsing & automated OCR pipelines',
+      'Predictive customer analytics & recommendation engines',
+      'API connectors connecting AI models to legacy databases'
+    ],
+    techStack: ['OpenAI / Claude', 'LangChain', 'Python', 'PyTorch', 'Pinecone', 'FastAPI'],
+    order: 2,
+    isActive: true
+  },
+  {
+    _id: 'os-3',
+    title: 'Cybersecurity & Compliance Auditing',
+    slug: 'cybersecurity-compliance',
+    category: 'Security',
+    badge: 'Zero-Trust',
+    icon: 'ShieldCheck',
+    tagline: 'Vulnerability assessments, penetration testing & compliance readiness.',
+    description: 'Safeguard your digital assets against evolving threats. We conduct deep code security audits, ethical penetration testing, zero-trust network configurations, and compliance preparation for SOC 2, ISO 27001, and GDPR.',
+    deliverables: [
+      'Full-stack source code vulnerability & dependency analysis',
+      'Web application & API penetration testing (OWASP Top 10)',
+      'Zero-trust access policy & multi-factor authentication setup',
+      'Automated daily offsite cryptographic backup systems',
+      'Regulatory compliance audit (SOC2, GDPR, HIPAA ready)'
+    ],
+    techStack: ['OWASP ZAP', 'Burp Suite', 'Cloudflare WAF', 'AWS GuardDuty', 'SonarQube'],
+    order: 3,
+    isActive: true
+  },
+  {
+    _id: 'os-4',
+    title: 'API Engineering & Legacy Modernization',
+    slug: 'api-legacy-modernization',
+    category: 'Enterprise Engineering',
+    badge: 'Mission-Critical',
+    icon: 'Server',
+    tagline: 'Refactoring monolithic legacy systems into agile, high-throughput microservices.',
+    description: 'Eliminate technical debt and bottlenecks without disrupting active business operations. We incrementally decouple legacy monoliths into modular services, build high-concurrency API gateways, and integrate disparate third-party enterprise tools.',
+    deliverables: [
+      'Monolith-to-microservice migration & strangler fig strategy',
+      'High-throughput RESTful and GraphQL API gateways',
+      'Real-time event streaming architectures with Apache Kafka / RabbitMQ',
+      'Legacy database migrations (SQL Server / Oracle to PostgreSQL)',
+      'Comprehensive OpenAPI documentation and developer SDKs'
+    ],
+    techStack: ['Node.js', 'Go', 'GraphQL', 'Kafka', 'Redis', 'PostgreSQL'],
+    order: 4,
+    isActive: true
+  },
+  {
+    _id: 'os-5',
+    title: 'Quality Assurance & Automated Testing',
+    slug: 'qa-test-automation',
+    category: 'Software Quality',
+    badge: 'Zero Regression',
+    icon: 'TestTube2',
+    tagline: 'End-to-end automated regression testing, load testing & cross-browser validation.',
+    description: 'Guarantee bug-free releases with automated QA pipelines. We write comprehensive integration, unit, and end-to-end test suites that run on every pull request, preventing regressions and validating peak traffic capacity.',
+    deliverables: [
+      'Automated end-to-end testing with Cypress & Playwright',
+      'High-concurrency load & stress testing (K6 / JMeter)',
+      'Cross-device mobile test automation on real hardware',
+      'Security regression suites & API contract testing'
+    ],
+    techStack: ['Playwright', 'Cypress', 'Jest', 'K6', 'Postman', 'Selenium'],
+    order: 5,
+    isActive: true
+  },
+  {
+    _id: 'os-6',
+    title: '24/7 Managed SRE & DevOps Support',
+    slug: 'managed-sre-support',
+    category: 'Operations',
+    badge: '15-min SLA',
+    icon: 'Headphones',
+    tagline: 'Around-the-clock uptime monitoring, incident response & proactive infrastructure maintenance.',
+    description: 'Protect your revenue with dedicated Site Reliability Engineers monitoring your production servers 24/7/365. Rapid triage, automatic failover configurations, database health checks, and routine security patching.',
+    deliverables: [
+      '24/7/365 automated infrastructure uptime & APM monitoring',
+      'Guaranteed 15-minute emergency incident response SLA',
+      'Weekly automated security patching & vulnerability remediation',
+      'Monthly capacity planning, database indexing & latency audits'
+    ],
+    techStack: ['Datadog', 'Prometheus', 'Grafana', 'PagerDuty', 'CloudWatch'],
+    order: 6,
+    isActive: true
+  }
+];
+
+let teamMembers = [
+  {
+    _id: 'team-1',
+    name: 'Anand Jayaraj',
+    role: 'Founder & Managing Director',
+    expertise: 'Strategic Vision & Enterprise Tech',
+    bio: '12+ years directing high-impact digital transformations for fast-scaling global brands.',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+    order: 1,
+    isActive: true
+  },
+  {
+    _id: 'team-2',
+    name: 'Dharani Kumar',
+    role: 'Head of Engineering & Architecture',
+    expertise: 'Full-Stack Systems & Cloud DevOps',
+    bio: 'Spearheading robust backend pipelines, microservices, and modern JavaScript architectures.',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
+    order: 2,
+    isActive: true
+  },
+  {
+    _id: 'team-3',
+    name: 'Priya Sundaram',
+    role: 'Lead UI/UX & Creative Director',
+    expertise: 'Design Systems & Brand Identity',
+    bio: 'Award-winning designer crafting editorial typography, tactile UI motion, and brand experiences.',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
+    order: 3,
+    isActive: true
+  },
+  {
+    _id: 'team-4',
+    name: 'Karthik Ranganathan',
+    role: 'Principal Mobile Architect',
+    expertise: 'Flutter, React Native & iOS',
+    bio: 'Architecting ultra-responsive mobile applications servicing hundreds of thousands of active users.',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
+    order: 4,
+    isActive: true
+  },
+  {
+    _id: 'team-5',
+    name: 'Sneha Balaji',
+    role: 'Senior Creative Technologist',
+    expertise: 'Interactive Animation & Frontend',
+    bio: 'Specialist in smooth micro-interactions, GSAP motion choreography, and high-performance rendering.',
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80',
+    order: 5,
+    isActive: true
+  },
+  {
+    _id: 'team-6',
+    name: 'Arun Prasath',
+    role: 'Cloud Infrastructure & Security Lead',
+    expertise: 'AWS, Kubernetes & Cyber Security',
+    bio: 'Ensuring bank-grade encryption, automated CI/CD pipelines, and 99.99% high availability.',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
+    order: 6,
+    isActive: true
+  }
+];
+
+let careers = [
+  {
+    _id: 'job-1',
+    title: 'Senior Full-Stack Engineer',
+    slug: 'senior-full-stack-engineer',
+    department: 'Engineering',
+    type: 'Full-time',
+    location: 'Chennai / Coimbatore / Remote',
+    experience: '4 - 7 Years',
+    salary: '₹14L - ₹24L PA + Equity',
+    description: 'We are seeking a seasoned Full-Stack Engineer to architect and build high-performance web applications using React, Next.js, Node.js, and PostgreSQL.',
+    responsibilities: [
+      'Architect robust backend services and resilient microservices in Node.js',
+      'Engineer lightning-fast client interfaces with Next.js App Router and Tailwind CSS',
+      'Optimize database queries and Core Web Vitals for high-traffic platforms',
+      'Mentor junior engineers through code reviews and technical design documents'
+    ],
+    requirements: [
+      'Strong proficiency in TypeScript, React, Next.js, and Node.js',
+      'Hands-on experience with PostgreSQL, Prisma/TypeORM, and Redis caching',
+      'Solid grasp of REST, GraphQL, Docker, and AWS/Vercel cloud deployments',
+      'Passionate about software craft, clean architecture, and sub-second page performance'
+    ],
+    order: 1,
+    isActive: true
+  },
+  {
+    _id: 'job-2',
+    title: 'Lead UI/UX & Motion Designer',
+    slug: 'lead-uiux-motion-designer',
+    department: 'Design',
+    type: 'Full-time',
+    location: 'Coimbatore / Remote',
+    experience: '3 - 6 Years',
+    salary: '₹12L - ₹20L PA',
+    description: 'Lead the visual design, tactile micro-interactions, and design systems for enterprise web portals and consumer-facing mobile products.',
+    responsibilities: [
+      'Craft end-to-end user journeys, wireframes, and high-fidelity Figma prototypes',
+      'Define component libraries, typography tokens, and design systems',
+      'Collaborate closely with frontend engineers to ensure 100% design fidelity',
+      'Design micro-animations and motion choreography for web & mobile'
+    ],
+    requirements: [
+      'Exceptional portfolio showcasing web app & mobile interface designs',
+      'Deep mastery of Figma, auto-layout, design tokens, and components',
+      'Understanding of HTML/CSS constraints and Framer/GSAP motion capabilities',
+      'Strong communication skills to articulate design decisions to clients'
+    ],
+    order: 2,
+    isActive: true
+  },
+  {
+    _id: 'job-3',
+    title: 'Mobile Application Developer (Flutter & React Native)',
+    slug: 'mobile-app-developer',
+    department: 'Mobile Engineering',
+    type: 'Full-time',
+    location: 'Chennai / Remote',
+    experience: '2 - 5 Years',
+    salary: '₹10L - ₹18L PA',
+    description: 'Build native-grade cross-platform applications for iOS and Android with buttery-smooth 60fps animations and resilient offline sync.',
+    responsibilities: [
+      'Develop scalable, maintainable mobile apps in Flutter and React Native',
+      'Integrate REST/GraphQL APIs, WebSocket telemetry, and push notifications',
+      'Manage app store publishing, TestFlight distribution, and CI/CD releases',
+      'Troubleshoot device-specific performance bottlenecks and memory leaks'
+    ],
+    requirements: [
+      'Proven experience shipping production apps to App Store and Google Play',
+      'Proficiency in Flutter/Dart or React Native/TypeScript',
+      'Knowledge of state management (Bloc, Provider, Redux, Zustand)',
+      'Familiarity with native iOS (Swift) or Android (Kotlin) bridging is a plus'
+    ],
+    order: 3,
+    isActive: true
+  },
+  {
+    _id: 'job-4',
+    title: 'Cloud DevOps & Infrastructure Engineer',
+    slug: 'cloud-devops-engineer',
+    department: 'Cloud & Infrastructure',
+    type: 'Full-time',
+    location: 'Remote (India)',
+    experience: '3 - 6 Years',
+    salary: '₹12L - ₹22L PA',
+    description: 'Architect, automate, and maintain resilient cloud environments across AWS and GCP, ensuring 99.99% uptime, zero-trust security, and automated CI/CD.',
+    responsibilities: [
+      'Build and maintain automated CI/CD pipelines via GitHub Actions and GitLab CI',
+      'Manage Kubernetes clusters (EKS/GKE), Docker images, and Helm charts',
+      'Implement Infrastructure as Code with Terraform and Ansible',
+      'Configure APM monitoring, log aggregation, and automated alerting systems'
+    ],
+    requirements: [
+      'Hands-on experience with AWS services (EC2, ECS, EKS, RDS, S3, CloudFront)',
+      'Expertise in Docker containerization and Kubernetes orchestration',
+      'Strong scripting skills in Bash and Python',
+      'Experience managing production databases and zero-downtime blue/green deployments'
+    ],
+    order: 4,
+    isActive: true
+  }
+];
+
+let perks = [
+  {
+    _id: 'perk-1',
+    icon: 'Laptop',
+    title: 'Top-Tier Hardware',
+    desc: 'Latest MacBook Pros, 4K external displays, and premium software licenses chosen by you.'
+  },
+  {
+    _id: 'perk-2',
+    icon: 'HeartHandshake',
+    title: 'Work-Life Balance',
+    desc: 'Flexible hybrid hours between our Coimbatore & Chennai hubs, or 100% remote for select roles.'
+  },
+  {
+    _id: 'perk-3',
+    icon: 'GraduationCap',
+    title: 'Growth & Learning Budget',
+    desc: 'Annual allowances for books, engineering certifications, tech conferences, and workshops.'
+  },
+  {
+    _id: 'perk-4',
+    icon: 'Smile',
+    title: 'Comprehensive Health & Wellness',
+    desc: 'Premium health insurance for you and your dependents, plus generous paid time off.'
+  }
+];
+
+let programs = [
+  {
+    _id: 'prog-1',
+    id: 'incubation',
+    slug: 'incubation',
+    tag: 'ENTERPRISE & STARTUPS',
+    badge: 'Co-Innovation Lab',
+    title: 'Enterprise Tech Incubation & Co-Innovation Lab',
+    subtitle: 'Co-building high-velocity MVPs, scalable architectures, and production-ready AI systems alongside JAC MediaLand engineering leadership.',
+    summary: 'Co-build mission-critical MVPs, generative AI workflows, and cloud-native digital infrastructure alongside JAC MediaLand senior engineers and principal architects.',
+    duration: '12 – 24 Weeks',
+    format: 'Hybrid / Dedicated Engineering Pods',
+    commitment: 'Full-time / Sprint-based',
+    targetAudience: 'High-Growth Startups, Enterprise Labs & Corporate Spin-offs',
+    location: 'Bangalore & Chennai Tech Labs / Remote Hybrid',
+    overview: 'The Enterprise Tech Incubation & Co-Innovation Lab is built for founders, corporate venture teams, and technology executives who need to bring complex software products to market with zero compromise on engineering rigor. Unlike standard incubators that offer theoretical advice, JAC MediaLand embeds battle-tested senior engineers, cloud architects, and UI/UX designers directly into your project squad.',
+    highlights: [
+      'Rapid prototype-to-production sprint cycles with 2-week ship cadences',
+      'Direct architecture advisory with senior CTOs & cloud principal engineers',
+      'Full CI/CD, AWS/GCP cloud setup, Docker/K8s infrastructure, and enterprise security audit',
+      'Fractional tech leadership and IP ownership guaranteed to your enterprise'
+    ],
+    curriculum: [
+      {
+        phase: 'Phase 01',
+        title: 'Architectural Blueprint & MVP Scoping',
+        weeks: 'Weeks 1 – 4',
+        description: 'System design, domain modeling, technical feasibility benchmarks, UI/UX design sprints, and database entity architecture.'
+      },
+      {
+        phase: 'Phase 02',
+        title: 'Core Development & Microservices Pods',
+        weeks: 'Weeks 5 – 14',
+        description: 'High-throughput API development, event-driven architecture, reactive frontends (Next.js/React), and third-party API orchestrations.'
+      },
+      {
+        phase: 'Phase 03',
+        title: 'Cloud DevOps, Hardening & Security Audit',
+        weeks: 'Weeks 15 – 18',
+        description: 'Automated CI/CD pipelines, penetration testing, load stress testing, GDPR/HIPAA compliance posture, and disaster recovery setups.'
+      },
+      {
+        phase: 'Phase 04',
+        title: 'Production Launch & Handover / Support',
+        weeks: 'Weeks 19 – 24',
+        description: 'Live traffic routing, observability (Datadog/Prometheus), technical documentation, and knowledge transfer to internal engineering leads.'
+      }
+    ],
+    deliverables: [
+      'Complete production-ready codebase with full source code IP ownership',
+      'Fully automated CI/CD pipelines on AWS / Google Cloud Platform',
+      'Comprehensive architecture diagrams & API documentation',
+      '30-day post-launch warranty with on-call SLA support'
+    ],
+    eligibility: [
+      'Funded seed to Series B tech startups OR established enterprise innovation departments',
+      'Defined product vision or validated prototype ready for production scale',
+      'Dedicated stakeholder or product owner available for weekly syncs'
+    ],
+    faqs: [
+      {
+        question: 'Who owns the intellectual property (IP)?',
+        answer: 'You retain 100% intellectual property rights and codebase ownership from day one. JAC MediaLand operates strictly under enterprise non-disclosure agreements (NDAs).'
+      },
+      {
+        question: 'How do you handle team collaboration?',
+        answer: 'We integrate with your Slack, Jira/Linear, and GitHub environments. You get direct daily contact with your dedicated tech lead and engineers.'
+      }
+    ],
+    order: 1,
+    isActive: true
+  },
+  {
+    _id: 'prog-2',
+    id: 'fullstack',
+    slug: 'fullstack',
+    tag: 'TALENT & UPSKILLING',
+    badge: 'Apprenticeship Cohort',
+    title: 'Full-Stack & Cloud Engineering Immersion',
+    subtitle: 'An intensive, hands-on apprenticeship designed to transform ambitious software developers into elite full-stack system builders.',
+    summary: 'An intensive hands-on apprenticeship bridging theory with real enterprise codebases. Master React, Node.js, distributed databases, cloud architecture, and modern DevOps pipelines.',
+    duration: '16 Weeks Intensive',
+    format: 'Live Immersive Sprints',
+    commitment: '20 hrs/week (Evening & Weekend cohorts available)',
+    targetAudience: 'Junior to Mid-level Developers & Lateral Career Switchers',
+    location: 'Virtual Classroom + JAC MediaLand Tech Hub Labs',
+    overview: 'Standard bootcamps build toy apps. The JAC MediaLand Full-Stack & Cloud Immersion Program drops you straight into actual production-grade paradigms. You will write code with strict TypeScript guidelines, implement distributed message queues, optimize database indices, configure container clusters, and write end-to-end tests under 1-on-1 code reviews from senior engineers.',
+    highlights: [
+      'Production codebase contribution under 1-on-1 tech lead review',
+      'Microservices, containerization (Docker/K8s) & serverless focus',
+      'Direct hiring pipeline into JAC MediaLand and client network',
+      'Comprehensive portfolio of 3 enterprise-tier shipped systems'
+    ],
+    curriculum: [
+      {
+        phase: 'Module 01',
+        title: 'Modern Frontend Architecture & System Performance',
+        weeks: 'Weeks 1 – 4',
+        description: 'Deep dive into React 19, Next.js App Router, SSR/SSG caching strategies, state management, and accessible UI systems.'
+      },
+      {
+        phase: 'Module 02',
+        title: 'Backend Scalability, Microservices & Databases',
+        weeks: 'Weeks 5 – 8',
+        description: 'Node.js/Express, Go or Python services, PostgreSQL schema optimization, MongoDB, Redis caching, and RabbitMQ/Kafka streaming.'
+      },
+      {
+        phase: 'Module 03',
+        title: 'Cloud Infrastructure, Containers & DevOps',
+        weeks: 'Weeks 9 – 12',
+        description: 'Docker multi-stage builds, Kubernetes orchestration, AWS ECS/Lambda, Terraform IaC, and GitHub Actions CI/CD workflows.'
+      },
+      {
+        phase: 'Module 04',
+        title: 'Capstone Enterprise Build & Interview Lab',
+        weeks: 'Weeks 13 – 16',
+        description: 'End-to-end architecture capstone project, system design mock interviews, live defense before industry CTO panels, and portfolio polish.'
+      }
+    ],
+    deliverables: [
+      'Verified JAC MediaLand Professional Full-Stack Credential',
+      '3 Live production projects hosted with custom domains and CI/CD pipelines',
+      'GitHub repository audited for industry clean-code standards',
+      'Direct interview referrals to hiring partners and JAC internal open roles'
+    ],
+    eligibility: [
+      'Foundational programming knowledge in JavaScript/Python or computer science degree',
+      'Commitment of minimum 15-20 hours per week for live labs and sprints',
+      'Passing grade on our online technical logic assessment'
+    ],
+    faqs: [
+      {
+        question: 'Are there live mentorship sessions?',
+        answer: 'Yes. Every cohort has 3 live interactive sessions per week with senior engineers, plus daily asynchronous code reviews on GitHub and Discord.'
+      }
+    ],
+    order: 2,
+    isActive: true
+  }
+];
+
+let processSteps = [
+  {
+    _id: 'proc-1',
+    step: '01',
+    title: 'Discovery & Product Strategy',
+    icon: 'Compass',
+    summary: 'Deep dive into your business model, target audiences, and technical requirements.',
+    details: [
+      'Stakeholder interviews and requirement gathering',
+      'Competitor landscape and technical feasibility analysis',
+      'Information architecture and user persona creation',
+      'Sprint roadmap and milestone timeline alignment'
+    ],
+    order: 1
+  },
+  {
+    _id: 'proc-2',
+    step: '02',
+    title: 'Human-Centered UI/UX Design',
+    icon: 'Layout',
+    summary: 'Transforming complex product logic into elegant, intuitive interactive interfaces.',
+    details: [
+      'Low-fidelity wireframing and user flow diagrams',
+      'High-fidelity interactive prototypes in Figma',
+      'Design tokens and accessible component systems',
+      'Iterative client reviews and usability refinement'
+    ],
+    order: 2
+  },
+  {
+    _id: 'proc-3',
+    step: '03',
+    title: 'High-Performance Development',
+    icon: 'Code2',
+    summary: 'Building fast, clean, and modular codebases using modern frameworks.',
+    details: [
+      'Component-driven frontend development (React / Next.js / Tailwind)',
+      'Robust backend APIs, database modeling, and auth guards',
+      'Micro-animations and fluid GSAP/Framer interactions',
+      'Sub-second Core Web Vitals optimization'
+    ],
+    order: 3
+  },
+  {
+    _id: 'proc-4',
+    step: '04',
+    title: 'Rigorous Testing & QA',
+    icon: 'ShieldCheck',
+    summary: 'Ensuring absolute stability across devices, screen sizes, and network conditions.',
+    details: [
+      'End-to-end responsiveness checks across mobile and desktop',
+      'Security headers, rate limiting, and input sanitization',
+      'Cross-browser compatibility validation',
+      'SEO schema markup and accessibility (WCAG) audits'
+    ],
+    order: 4
+  },
+  {
+    _id: 'proc-5',
+    step: '05',
+    title: 'Deployment & Growth Scaling',
+    icon: 'Rocket',
+    summary: 'Flawless production launch with continuous monitoring and proactive maintenance.',
+    details: [
+      'Zero-downtime production deployment and DNS configuration',
+      'Observability dashboards and APM latency monitoring',
+      'Search engine indexing submission & Google Analytics tracking',
+      'Dedicated post-launch SLA support and ongoing iteration'
+    ],
+    order: 5
+  }
+];
+
+let engineeringStandards = [
+  {
+    _id: 'std-1',
+    icon: 'Zap',
+    title: 'Sub-Second Page Loads',
+    desc: 'Every website and application is engineered to achieve 90+ Lighthouse and Core Web Vitals performance benchmarks.'
+  },
+  {
+    _id: 'std-2',
+    icon: 'GitBranch',
+    title: 'Clean Git CI/CD Pipelines',
+    desc: 'Automated staging deployments, semantic pull requests, and multi-tier code reviews before every production release.'
+  },
+  {
+    _id: 'std-3',
+    icon: 'Lock',
+    title: 'Security-First Architecture',
+    desc: 'Data sanitization, CSRF & XSS protections, secure HTTP-only cookies, and encrypted secrets management.'
+  },
+  {
+    _id: 'std-4',
+    icon: 'Cpu',
+    title: 'Modular & Reusable Components',
+    desc: 'Scalable atomic component architecture that empowers your in-house teams to maintain and extend features smoothly.'
+  }
+];
+
+let industries = [
+  { _id: 'ind-1', title: 'Agriculture', subtitle: 'SOLUTIONS & TECH', icon: 'Wind', order: 1, isActive: true },
+  { _id: 'ind-2', title: 'Bank', subtitle: 'SOLUTIONS & TECH', icon: 'DollarSign', order: 2, isActive: true },
+  { _id: 'ind-3', title: 'Chemical', subtitle: 'SOLUTIONS & TECH', icon: 'Droplet', order: 3, isActive: true },
+  { _id: 'ind-4', title: 'Construction', subtitle: 'SOLUTIONS & TECH', icon: 'Wrench', order: 4, isActive: true },
+  { _id: 'ind-5', title: 'Education', subtitle: 'SOLUTIONS & TECH', icon: 'BookOpen', order: 5, isActive: true },
+  { _id: 'ind-6', title: 'Health', subtitle: 'SOLUTIONS & TECH', icon: 'Heart', order: 6, isActive: true },
+  { _id: 'ind-7', title: 'Insurance', subtitle: 'SOLUTIONS & TECH', icon: 'Shield', order: 7, isActive: true },
+  { _id: 'ind-8', title: 'Logistics', subtitle: 'SOLUTIONS & TECH', icon: 'Truck', order: 8, isActive: true },
+  { _id: 'ind-9', title: 'Media', subtitle: 'SOLUTIONS & TECH', icon: 'Video', order: 9, isActive: true },
+  { _id: 'ind-10', title: 'NGOs', subtitle: 'SOLUTIONS & TECH', icon: 'Users', order: 10, isActive: true },
+  { _id: 'ind-11', title: 'Real Estate', subtitle: 'SOLUTIONS & TECH', icon: 'Home', order: 11, isActive: true },
+  { _id: 'ind-12', title: 'Retail Business', subtitle: 'SOLUTIONS & TECH', icon: 'ShoppingBag', order: 12, isActive: true },
+  { _id: 'ind-13', title: 'Social Network', subtitle: 'SOLUTIONS & TECH', icon: 'Flag', order: 13, isActive: true },
+  { _id: 'ind-14', title: 'Space', subtitle: 'SOLUTIONS & TECH', icon: 'Globe', order: 14, isActive: true },
+  { _id: 'ind-15', title: 'Sports', subtitle: 'SOLUTIONS & TECH', icon: 'Award', order: 15, isActive: true },
+  { _id: 'ind-16', title: 'Tourism', subtitle: 'SOLUTIONS & TECH', icon: 'Map', order: 16, isActive: true }
+];
+
+let homeContent = {
+  heroTagline: 'Creative Design & Full-Stack IT Solutions Agency',
+  heroHeading: 'Innovating Digital Possibilities,',
+  heroHeadingItalic: 'Engineering Enterprise Growth.',
+  heroDescription: 'From high-performance corporate platforms and native mobile apps to AI integrations and design systems, JAC MediaLand engineers bespoke digital excellence that accelerates your business.',
+  primaryCtaText: 'Explore Services',
+  primaryCtaLink: '/services',
+  secondaryCtaText: 'Schedule Technical Consultation',
+  secondaryCtaLink: '/contact',
+  storySectionTitle: 'Why JAC MediaLand?',
+  storySectionHeading: 'Engineering with purpose, designing with soul.',
+  storySectionDescription: 'We bridge visionary design aesthetics with battle-tested software engineering. Our platforms are built from scratch with clean code, sub-second performance, and intuitive user experiences.',
+  storyItems: [
+    {
+      id: 1,
+      title: 'Relentless Focus on Craft & Performance',
+      content: 'We never use bloated website builders or off-the-shelf templates. Every digital solution is meticulously crafted with modern frontend code, sub-second load times, and custom micro-animations that make your users take notice.',
+      stat: '99/100',
+      statLabel: 'Average Google PageSpeed'
+    },
+    {
+      id: 2,
+      title: 'Full-Stack Technical Capabilities Under One Roof',
+      content: 'From complex reactive web applications and mobile apps to brand strategy, conversion-optimized design systems, and cloud infrastructure, our multi-disciplinary team seamlessly connects design with rigorous software engineering.',
+      stat: '100%',
+      statLabel: 'In-House Delivery'
+    },
+    {
+      id: 3,
+      title: 'True Business Partnership, Not Just Vendors',
+      content: 'We invest the time to understand your unit economics, user psychology, and market landscape. We don’t just deliver code—we guide technical strategy to help you scale sustainably with high ROI.',
+      stat: '98%',
+      statLabel: 'Client Retention Rate'
+    },
+    {
+      id: 4,
+      title: 'Transparent Collaboration & Rapid Agility',
+      content: 'Real-time communication, weekly staging releases, and straightforward roadmaps. You always have full visibility into engineering milestones, code reviews, and launch timelines.',
+      stat: '2-4 wks',
+      statLabel: 'Rapid MVP Deployment'
+    }
+  ]
+};
+
+let aboutContent = {
+  heroEyebrow: 'About JAC MediaLand',
+  heroHeading: 'We exist to help ambitious brands',
+  heroHeadingItalic: 'dominate the digital world.',
+  heroDescription: 'Founded with a vision to merge cutting-edge software engineering with award-winning creative design, JAC MediaLand is a full-service technology agency delivering transformative solutions across India and internationally.',
+  missionHeading: 'Our Core Mission',
+  missionText: 'To democratize world-class software craft, empower forward-thinking enterprises with scalable technology stacks, and create digital experiences that set new industry benchmarks for performance and aesthetics.',
+  visionHeading: 'Our Vision',
+  visionText: 'To be the most trusted technology engineering partner for next-generation enterprises globally, known for uncompromising quality, architectural durability, and human-centered design.',
+  coreValues: [
+    {
+      icon: 'Code',
+      title: 'Zero Compromise on Craft',
+      description: 'We believe clean code is poetry. We refuse shortcuts, templates, or bloated dependencies, building custom software engineered to last for years.'
+    },
+    {
+      icon: 'Sparkles',
+      title: 'Design that Moves People',
+      description: 'Aesthetics and usability are not afterthoughts. We craft thoughtful micro-interactions, editorial typography, and visual systems that elevate brands.'
+    },
+    {
+      icon: 'Cpu',
+      title: 'Modern Architecture',
+      description: 'We build with modern frameworks like React, Next.js, Node.js, and cloud microservices to ensure lightning-fast speeds and effortless scalability.'
+    },
+    {
+      icon: 'Shield',
+      title: 'Radical Transparency',
+      description: 'No technical jargon smoke-screens. We operate as genuine partners with weekly demos, shared code repos, and honest counsel on roadmap trade-offs.'
+    }
+  ],
+  teamStrengths: [
+    { title: 'Full-Stack Developers', count: '14+', desc: 'Specializing in React, Next.js, Node.js, Python, PostgreSQL and Cloud' },
+    { title: 'Mobile Engineers', count: '6+', desc: 'Native & cross-platform Flutter and React Native specialists' },
+    { title: 'UI/UX & Brand Designers', count: '5+', desc: 'Design systems, prototyping, animation, and visual identities' },
+    { title: 'SEO & Growth Strategists', count: '4+', desc: 'Technical SEO, search semantics, and multi-channel paid acquisition' }
+  ]
+};
+
+let legalContent = {
+  privacyPolicy: {
+    title: 'Privacy Policy',
+    lastUpdated: 'January 2026',
+    sections: [
+      {
+        heading: '1. Information We Collect',
+        content: 'When you visit JAC MediaLand IT Solutions or submit project inquiries through our contact forms, we may collect personal identifiable details including your name, corporate email address, phone number, and project descriptions.'
+      },
+      {
+        heading: '2. How We Use Your Information',
+        content: 'Your contact details are strictly utilized to respond to technical inquiries, generate service proposals, execute nondisclosure agreements, and maintain communications regarding ongoing product development.'
+      },
+      {
+        heading: '3. Data Confidentiality & Non-Disclosure',
+        content: 'We treat all client specifications, architecture diagrams, and software requirements with strict confidentiality. JAC MediaLand does not sell, rent, or trade your personal or project data to third-party marketing entities.'
+      },
+      {
+        heading: '4. Security Measures',
+        content: 'We employ HTTPS encryption, rate limiting, and secure access protocols to safeguard all submitted data against unauthorized interception or breach.'
+      },
+      {
+        heading: '5. Contact Our Data Controller',
+        content: 'For privacy-related inquiries or to request data deletion, contact us at privacy@jacmedialand.com.'
+      }
+    ]
+  },
+  termsOfService: {
+    title: 'Terms of Service',
+    lastUpdated: 'January 2026',
+    sections: [
+      {
+        heading: '1. Agreement to Terms',
+        content: 'By accessing or utilizing the services provided by JAC MediaLand IT Solutions, you acknowledge and agree to be bound by these Terms of Service and all applicable laws and regulations.'
+      },
+      {
+        heading: '2. Intellectual Property Rights',
+        content: 'Unless otherwise stipulated in a signed Master Services Agreement (MSA), all custom software codebases and deliverables created for clients become the sole intellectual property of the client upon complete settlement of invoices.'
+      },
+      {
+        heading: '3. Service Scope & Revisions',
+        content: 'Project timelines, deliverables, sprint goals, and revision cycles are formally defined in individual Statement of Work (SOW) documents agreed between JAC MediaLand and the client.'
+      },
+      {
+        heading: '4. Limitation of Liability',
+        content: 'JAC MediaLand shall not be held liable for indirect, incidental, or consequential damages resulting from third-party hosting downtime, API outages, or unauthorized third-party intrusions outside our control.'
+      }
+    ]
+  }
+};
+
+let logos = [
+  { id: 'logo-1', name: 'Crazy Fun', src: '/Logos/optimized/1.png', order: 1, isActive: true },
+  { id: 'logo-2', name: 'Gotfyd', src: '/Logos/optimized/2.png', order: 2, isActive: true },
+  { id: 'logo-3', name: "Sophie's Studio", src: '/Logos/optimized/3.png', order: 3, isActive: true },
+  { id: 'logo-4', name: "Mama's Coffee", src: '/Logos/optimized/4.png', order: 4, isActive: true },
+  { id: 'logo-5', name: 'Rana Studio', src: '/Logos/optimized/5.png', order: 5, isActive: true },
+  { id: 'logo-6', name: 'NIIT Technologies', src: '/Logos/optimized/6.png', order: 6, isActive: true },
+  { id: 'logo-7', name: 'LevelUp Learning', src: '/Logos/optimized/7.png', order: 7, isActive: true },
+  { id: 'logo-8', name: 'JAC Supercars', src: '/Logos/optimized/8.png', order: 8, isActive: true },
+  { id: 'logo-9', name: 'Fiverr Pro', src: '/Logos/optimized/9.png', order: 9, isActive: true },
+  { id: 'logo-10', name: 'Thejas Boutique', src: '/Logos/optimized/10.png', order: 10, isActive: true },
+  { id: 'logo-11', name: 'VVM Traders', src: '/Logos/optimized/11.png', order: 11, isActive: true },
+  { id: 'logo-12', name: 'Upwork Global', src: '/Logos/optimized/12.png', order: 12, isActive: true },
+  { id: 'logo-13', name: 'Shopify Partners', src: '/Logos/optimized/13.png', order: 13, isActive: true },
+  { id: 'logo-14', name: 'Brand Partner 14', src: '/Logos/optimized/14.png', order: 14, isActive: true }
+];
+
 module.exports = {
   adminUser,
   services,
   projects,
   enquiries,
   faqs,
-  settings
+  settings,
+  products,
+  otherServices,
+  teamMembers,
+  careers,
+  perks,
+  programs,
+  processSteps,
+  engineeringStandards,
+  industries,
+  homeContent,
+  aboutContent,
+  legalContent,
+  logos
 };

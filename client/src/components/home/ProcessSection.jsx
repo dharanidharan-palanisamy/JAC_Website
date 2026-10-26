@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Compass, Layout, Code2, ShieldCheck, Rocket } from 'lucide-react';
+import { api } from '../../services/api';
 
-const processSteps = [
+const defaultProcessSteps = [
   {
     step: '01',
     title: 'Discovery & Product Strategy',
@@ -65,8 +66,31 @@ const processSteps = [
   }
 ];
 
+const processIconMap = {
+  Compass,
+  Layout,
+  Code2,
+  ShieldCheck,
+  Rocket
+};
+
 const ProcessSection = () => {
+  const [processSteps, setProcessSteps] = useState(defaultProcessSteps);
   const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    const loadSteps = async () => {
+      try {
+        const res = await api.getProcessSteps();
+        if (res.success && res.data?.steps && res.data.steps.length > 0) {
+          setProcessSteps(res.data.steps);
+        }
+      } catch (err) {
+        console.error('Failed to load process steps from API:', err);
+      }
+    };
+    loadSteps();
+  }, []);
 
   return (
     <section className="py-24 sm:py-32 bg-[#F1F1EF]">
@@ -89,7 +113,7 @@ const ProcessSection = () => {
         {/* Step Navigation Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-10">
           {processSteps.map((s, index) => {
-            const Icon = s.icon;
+            const Icon = typeof s.icon === 'string' ? (processIconMap[s.icon] || Compass) : (s.icon || Compass);
             const isActive = activeStep === index;
             return (
               <button
