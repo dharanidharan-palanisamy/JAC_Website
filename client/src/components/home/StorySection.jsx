@@ -54,8 +54,9 @@ const StorySection = ({ stats, homeContent }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: Heading & Narrative */}
           <div className="lg:col-span-5">
-            <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-              Why JAC MediaLand?
+            <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+              <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Why Choose</span>{' '}
+              <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Us</span>
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15] mb-6">
               Engineering with purpose,{' '}

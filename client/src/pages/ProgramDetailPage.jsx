@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -109,7 +109,7 @@ const ProgramDetailPage = () => {
             <ArrowLeft className="w-3.5 h-3.5" /> Home
           </Link>
           <span>/</span>
-          <Link to="/#programs" className="hover:text-neutral-900 transition-colors">
+          <Link to="/programs" className="hover:text-neutral-900 transition-colors">
             Our Programs
           </Link>
           <span>/</span>
@@ -128,7 +128,7 @@ const ProgramDetailPage = () => {
               {program.tag}
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.12]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-[1.12] font-sans">
               {program.title}
             </h1>
 
@@ -177,7 +177,9 @@ const ProgramDetailPage = () => {
           <div className="lg:col-span-7 space-y-12">
             {/* Overview */}
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-4 tracking-tight">Program Overview</h2>
+              <h2 className="text-2xl font-extrabold text-neutral-900 mb-4 tracking-tight font-sans">
+                <span className="font-serif italic font-normal text-neutral-500 mr-2">Program</span>Overview
+              </h2>
               <p className="text-neutral-700 leading-relaxed text-base sm:text-lg">
                 {program.overview}
               </p>
@@ -185,9 +187,9 @@ const ProgramDetailPage = () => {
 
             {/* Key Highlights */}
             <div className="bg-white rounded-3xl p-8 border border-neutral-200/80 shadow-sm">
-              <h3 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+              <h3 className="text-xl font-extrabold text-neutral-900 mb-6 flex items-center gap-2 font-sans">
                 <Sparkles className="w-5 h-5 text-amber-500" />
-                Key Program Pillars
+                <span><span className="font-serif italic font-normal text-neutral-500 mr-2">Key</span>Pillars</span>
               </h3>
               <div className="space-y-4">
                 {program.highlights.map((highlight, index) => (
@@ -204,11 +206,11 @@ const ProgramDetailPage = () => {
             {/* Curriculum Roadmap */}
             <div>
               <div className="mb-6">
-                <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-1">
+                <span className="text-xs font-serif italic text-neutral-500 block mb-1">
                   Syllabus &amp; Roadmap
                 </span>
-                <h3 className="text-2xl font-bold text-neutral-900 tracking-tight">
-                  Curriculum &amp; Milestones
+                <h3 className="text-2xl font-extrabold text-neutral-900 tracking-tight font-sans">
+                  <span className="font-serif italic font-normal text-neutral-500 mr-2">Curriculum &amp;</span>Milestones
                 </h3>
               </div>
 
@@ -235,9 +237,9 @@ const ProgramDetailPage = () => {
 
             {/* Deliverables & Outcomes */}
             <div className="bg-neutral-900 text-white rounded-3xl p-8 sm:p-10 shadow-lg">
-              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <h3 className="text-xl font-extrabold text-white mb-6 flex items-center gap-2 font-sans">
                 <ShieldCheck className="w-5 h-5 text-amber-400" />
-                Deliverables &amp; Tangible Outcomes
+                <span><span className="font-serif italic font-normal text-neutral-300 mr-2">Tangible</span>Outcomes</span>
               </h3>
               <div className="space-y-3.5">
                 {program.deliverables.map((item, idx) => (
@@ -251,9 +253,9 @@ const ProgramDetailPage = () => {
 
             {/* Eligibility */}
             <div className="p-8 rounded-3xl bg-neutral-50 border border-neutral-200">
-              <h3 className="text-lg font-bold text-neutral-900 mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-extrabold text-neutral-900 mb-4 flex items-center gap-2 font-sans">
                 <FileText className="w-5 h-5 text-neutral-700" />
-                Candidate &amp; Organizational Eligibility
+                <span><span className="font-serif italic font-normal text-neutral-500 mr-2">Candidate</span>Eligibility</span>
               </h3>
               <ul className="space-y-2.5 text-sm text-neutral-600 list-disc list-inside">
                 {program.eligibility.map((item, idx) => (
@@ -265,9 +267,9 @@ const ProgramDetailPage = () => {
             {/* FAQs Accordion */}
             {program.faqs && program.faqs.length > 0 && (
               <div>
-                <h3 className="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+                <h3 className="text-2xl font-extrabold text-neutral-900 mb-6 flex items-center gap-2 font-sans">
                   <HelpCircle className="w-6 h-6 text-neutral-400" />
-                  Frequently Asked Questions
+                  <span><span className="font-serif italic font-normal text-neutral-500 mr-2">Common</span>Questions</span>
                 </h3>
                 <div className="space-y-3">
                   {program.faqs.map((faq, idx) => (
@@ -302,11 +304,11 @@ const ProgramDetailPage = () => {
           <div className="lg:col-span-5">
             <div className="sticky top-28 bg-white rounded-3xl p-8 border border-neutral-200/80 shadow-xl">
               <div className="mb-6">
-                <span className="text-xs uppercase font-bold tracking-widest text-amber-600 block mb-1">
+                <span className="text-xs font-serif italic text-amber-700 block mb-1">
                   Admissions &amp; Onboarding
                 </span>
-                <h3 className="text-2xl font-bold text-neutral-900">
-                  Apply for this Program
+                <h3 className="text-2xl font-extrabold text-neutral-900 font-sans">
+                  <span className="font-serif italic font-normal text-neutral-500 mr-2">Apply for</span>Program
                 </h3>
                 <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
                   Submit your details below to schedule an onboarding consultation or join the upcoming cohort.
@@ -446,18 +448,18 @@ const ProgramDetailPage = () => {
         <div className="border-t border-neutral-200 pt-16">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <div>
-              <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-1">
+              <span className="text-xs font-serif italic text-neutral-500 block mb-1">
                 Explore More
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-                Other Specialized Programs
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 font-sans">
+                <span className="font-serif italic font-normal text-neutral-500 mr-2">Other</span>Specialized Programs
               </h3>
             </div>
             <Link
-              to="/"
+              to="/programs"
               className="text-xs font-semibold text-neutral-900 hover:text-amber-600 transition-colors flex items-center gap-1"
             >
-              View all on Homepage <ArrowRight className="w-3.5 h-3.5" />
+              View All Programs <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 

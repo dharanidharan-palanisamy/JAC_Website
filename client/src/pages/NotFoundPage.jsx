@@ -9,8 +9,8 @@ const NotFoundPage = () => {
         <span className="text-7xl sm:text-8xl font-black font-sans-tight text-neutral-900 block mb-2">
           404
         </span>
-        <h1 className="text-2xl font-bold text-neutral-900 mb-3">
-          Page Not Found
+        <h1 className="text-2xl font-extrabold text-neutral-900 mb-3 font-sans">
+          <span className="font-serif italic font-normal text-neutral-500 mr-2">Page</span>Not Found
         </h1>
         <p className="text-neutral-600 text-sm mb-8 leading-relaxed">
           The page or digital asset you are seeking might have been moved, renamed, or is temporarily unavailable.

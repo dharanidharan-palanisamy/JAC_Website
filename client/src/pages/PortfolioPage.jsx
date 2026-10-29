@@ -36,8 +36,9 @@ const PortfolioPage = () => {
       {/* Portfolio Hero */}
       <section className="nutz-hero-gradient pt-16 pb-8 sm:pb-10 text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <span className="font-serif-italic text-2xl sm:text-3xl text-neutral-800 block mb-3">
-            Case Studies & Selected Work
+          <span className="text-2xl sm:text-3xl md:text-4xl block mb-3">
+            <span className="font-serif-italic font-normal text-neutral-800">Our</span>{' '}
+            <span className="font-sans font-extrabold text-neutral-900 tracking-tight">Work</span>
           </span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-6 font-sans-tight">
             Proof in our pixels,{' '}
@@ -71,7 +72,7 @@ const PortfolioPage = () => {
       {/* Projects Grid */}
       <section className="pt-4 pb-20 sm:pt-6 sm:pb-24 bg-[#FBFBFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
             {filtered.map((project, idx) => (
               <div
                 key={project._id || project.slug}
@@ -93,23 +94,20 @@ const PortfolioPage = () => {
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 flex flex-col justify-between grow">
+                <div className="p-3.5 sm:p-4 flex flex-col justify-between grow">
                   <div>
-                    <span className="text-xs font-mono font-medium text-neutral-400 block mb-1.5 uppercase">
-                      Client: {project.client}
-                    </span>
-                    <h3 className="text-lg sm:text-xl font-bold text-neutral-900 mb-2 group-hover:text-neutral-700 transition-colors">
+                    <h3 className="text-lg sm:text-xl font-bold text-neutral-900 mb-1.5 group-hover:text-neutral-700 transition-colors">
                       <Link to={`/portfolio/${project.slug}`}>
                         {project.title}
                       </Link>
                     </h3>
-                    <p className="text-neutral-600 text-sm leading-relaxed mb-4 line-clamp-2">
+                    <p className="text-neutral-600 text-sm leading-relaxed mb-3 line-clamp-2">
                       {project.summary}
                     </p>
                   </div>
 
                   {/* Highlights and Tags */}
-                  <div className="pt-4 border-t border-neutral-100 space-y-4">
+                  <div className="pt-3 border-t border-neutral-100 space-y-3">
                     <div className="flex flex-wrap gap-1.5">
                       {(project.techStack || []).map((tech, tIdx) => (
                         <span
@@ -121,19 +119,10 @@ const PortfolioPage = () => {
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        {(project.results || []).slice(0, 2).map((res, rIdx) => (
-                          <div key={rIdx} className="flex flex-col">
-                            <span className="text-base font-bold text-black font-sans-tight">{res.metric}</span>
-                            <span className="text-[10px] text-neutral-500 uppercase">{res.label}</span>
-                          </div>
-                        ))}
-                      </div>
-
+                    <div className="flex items-center justify-end pt-1">
                       <Link
                         to={`/portfolio/${project.slug}`}
-                        className="text-xs font-semibold text-neutral-900 hover:text-black flex items-center gap-1 group/btn"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-black bg-white text-xs font-semibold text-black hover:bg-black hover:text-white transition-all duration-200 group/btn shrink-0"
                       >
                         <span>Case Study</span>
                         <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" />

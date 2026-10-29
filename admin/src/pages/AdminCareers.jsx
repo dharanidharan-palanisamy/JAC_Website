@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
   Briefcase,
   Plus,
@@ -13,15 +12,25 @@ import {
   CheckCircle2,
   Smile,
   GraduationCap,
-  HeartHandshake
+  HeartHandshake,
+  FileText,
+  Download,
+  ExternalLink,
+  Mail,
+  Phone,
+  User,
+  Inbox
 } from 'lucide-react';
 import { api } from '../services/api';
 
 const AdminCareers = () => {
-  const [activeTab, setActiveTab] = useState('jobs'); // 'jobs' | 'perks'
+  const [activeTab, setActiveTab] = useState('jobs'); // 'jobs' | 'perks' | 'applications'
   const [jobs, setJobs] = useState([]);
   const [perks, setPerks] = useState([]);
+  const [applications, setApplications] = useState([]);
+  const [deleteConfirmAppId, setDeleteConfirmAppId] = useState(null);
   const [loading, setLoading] = useState(true);
+
 
   // Job Modal
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
@@ -60,12 +69,14 @@ const AdminCareers = () => {
   const loadCareersData = async () => {
     setLoading(true);
     try {
-      const [jobsRes, perksRes] = await Promise.all([
+      const [jobsRes, perksRes, appsRes] = await Promise.all([
         api.getAllCareersAdmin(),
-        api.getPerks()
+        api.getPerks(),
+        api.getApplicationsAdmin()
       ]);
       if (jobsRes.success) setJobs(jobsRes.data);
       if (perksRes.success) setPerks(perksRes.data);
+      if (appsRes?.success) setApplications(appsRes.data);
     } catch (err) {
       console.error('Error loading careers:', err);
     } finally {
@@ -76,6 +87,42 @@ const AdminCareers = () => {
   useEffect(() => {
     loadCareersData();
   }, []);
+
+  const handleStatusChange = async (appId, newStatus) => {
+    try {
+      const res = await api.updateApplicationStatus(appId, newStatus);
+      if (res.success) {
+        setApplications(applications.map((a) => (a._id === appId ? { ...a, status: newStatus } : a)));
+      }
+    } catch (err) {
+      console.error('Error updating status:', err);
+    }
+  };
+
+  const handleDeleteApplication = async (appId) => {
+    try {
+      const res = await api.deleteApplication(appId);
+      if (res.success) {
+        setApplications(applications.filter((a) => a._id !== appId));
+        setDeleteConfirmAppId(null);
+      }
+    } catch (err) {
+      console.error('Error deleting application:', err);
+    }
+  };
+
+  const handleDownloadResume = (app) => {
+    if (app.resumeFile && app.resumeFile.startsWith('data:')) {
+      const a = document.createElement('a');
+      a.href = app.resumeFile;
+      a.download = app.resumeFileName || `${app.name.replace(/\s+/g, '_')}_Resume.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else if (app.resumeUrl) {
+      window.open(app.resumeUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   // Job Handlers
   const openCreateJobModal = () => {
@@ -252,6 +299,18 @@ const AdminCareers = () => {
           }`}
         >
           Company Perks ({perks.length})
+        </button>
+
+        <button
+          onClick={() => setActiveTab('applications')}
+          className={`py-2 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+            activeTab === 'applications'
+              ? 'bg-black text-white shadow-xs'
+              : 'text-neutral-600 hover:text-neutral-950 hover:bg-white'
+          }`}
+        >
+          <Inbox className="w-4 h-4" />
+          <span>Applications ({applications.length})</span>
         </button>
       </div>
 
@@ -447,6 +506,173 @@ const AdminCareers = () => {
           </div>
         </div>
       )}
+
+      {/* TAB 3: APPLICATIONS */}
+      {activeTab === 'applications' && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-bold text-neutral-950">Candidate Applications</h2>
+              <p className="text-xs text-neutral-600 mt-0.5">
+                Review submitted resumes, contact info, and portfolio links from candidates.
+              </p>
+            </div>
+            <button
+              onClick={loadCareersData}
+              className="py-1.5 px-3 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-semibold cursor-pointer"
+            >
+              Refresh
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="py-16 text-center text-neutral-600 text-sm">
+              Loading candidate applications...
+            </div>
+          ) : applications.length === 0 ? (
+            <div className="py-16 text-center bg-white border border-neutral-200 rounded-3xl p-8 space-y-3">
+              <Inbox className="w-10 h-10 text-neutral-400 mx-auto stroke-1" />
+              <h3 className="text-base font-bold text-neutral-900">No applications received yet</h3>
+              <p className="text-xs text-neutral-500 max-w-sm mx-auto">
+                Candidate submissions from the public Careers page modal will automatically appear here with their attached resumes.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {applications.map((app) => (
+                <div
+                  key={app._id}
+                  className="p-5 sm:p-6 bg-white border border-neutral-200 rounded-2xl space-y-4 shadow-xs hover:border-neutral-300 transition-all"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-base font-bold text-neutral-950 flex items-center gap-2">
+                          <User className="w-4 h-4 text-neutral-600" />
+                          <span>{app.name}</span>
+                        </h3>
+                        <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-neutral-100 text-neutral-700">
+                          {app.jobTitle}
+                        </span>
+                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-neutral-50 text-neutral-500 border border-neutral-200">
+                          {app.department}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-4 text-xs text-neutral-600 flex-wrap pt-1">
+                        <a
+                          href={`mailto:${app.email}`}
+                          className="flex items-center gap-1.5 text-neutral-800 hover:text-black hover:underline"
+                        >
+                          <Mail className="w-3.5 h-3.5 text-neutral-500" />
+                          <span>{app.email}</span>
+                        </a>
+                        <a
+                          href={`tel:${app.phone}`}
+                          className="flex items-center gap-1.5 text-neutral-800 hover:text-black hover:underline"
+                        >
+                          <Phone className="w-3.5 h-3.5 text-neutral-500" />
+                          <span>{app.phone}</span>
+                        </a>
+                        {app.portfolio && (
+                          <a
+                            href={app.portfolio}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-black font-semibold hover:underline"
+                          >
+                            <span>Portfolio / GitHub</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 self-start">
+                      {/* Status Selector */}
+                      <select
+                        value={app.status || 'New'}
+                        onChange={(e) => handleStatusChange(app._id, e.target.value)}
+                        className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:border-black cursor-pointer"
+                      >
+                        <option value="New">Status: New</option>
+                        <option value="Reviewing">Status: Reviewing</option>
+                        <option value="Shortlisted">Status: Shortlisted</option>
+                        <option value="Interviewing">Status: Interviewing</option>
+                        <option value="Rejected">Status: Rejected</option>
+                      </select>
+
+                      {/* Delete */}
+                      {deleteConfirmAppId === app._id ? (
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleDeleteApplication(app._id)}
+                            className="py-1 px-2 rounded-lg bg-rose-600 text-white text-xs font-bold"
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirmAppId(null)}
+                            className="py-1 px-1.5 rounded-lg bg-neutral-100 text-neutral-600 text-xs"
+                          >
+                            X
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setDeleteConfirmAppId(app._id)}
+                          className="p-1.5 rounded-lg bg-neutral-100 hover:bg-rose-50 text-neutral-400 hover:text-rose-600 cursor-pointer"
+                          title="Delete application"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Resume Attached Block */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-neutral-50 border border-neutral-200">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-lg bg-black text-white flex items-center justify-center shrink-0">
+                        <FileText className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-neutral-950 truncate">
+                          {app.resumeFileName || 'Candidate_Resume.pdf'}
+                        </p>
+                        <p className="text-[11px] text-neutral-500">
+                          {app.resumeFileSize || (app.resumeUrl ? 'Cloud Document Link' : 'Document File')} • Applied on {new Date(app.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+
+                    {(app.resumeFile || app.resumeUrl) ? (
+                      <button
+                        onClick={() => handleDownloadResume(app)}
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 text-white text-xs font-semibold cursor-pointer shrink-0 transition-colors shadow-xs"
+                      >
+                        {app.resumeFile ? <Download className="w-3.5 h-3.5" /> : <ExternalLink className="w-3.5 h-3.5" />}
+                        <span>{app.resumeFile ? 'Download Resume' : 'Open Resume Link'}</span>
+                      </button>
+                    ) : (
+                      <span className="text-xs text-neutral-400 italic">No resume attached</span>
+                    )}
+                  </div>
+
+                  {/* Cover Note */}
+                  {app.coverNote && (
+                    <div className="p-3 rounded-xl bg-neutral-50/70 text-xs text-neutral-700 leading-relaxed border border-neutral-100">
+                      <span className="font-bold text-neutral-900 block mb-0.5">Candidate Note:</span>
+                      {app.coverNote}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
 
       {/* JOB MODAL */}
       {isJobModalOpen && (

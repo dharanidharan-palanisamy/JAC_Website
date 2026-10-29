@@ -65,8 +65,9 @@ const ContactPage = () => {
       {/* Contact Hero */}
       <section className="nutz-hero-gradient pt-16 pb-8 sm:pb-10 text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <span className="font-serif-italic text-2xl sm:text-3xl text-neutral-800 block mb-3">
-            Start a Conversation
+          <span className="text-2xl sm:text-3xl md:text-4xl block mb-3">
+            <span className="font-serif-italic font-normal text-neutral-800">Contact</span>{' '}
+            <span className="font-sans font-extrabold text-neutral-900 tracking-tight">Us</span>
           </span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-4 font-sans-tight">
             Let’s build something{' '}
@@ -87,8 +88,9 @@ const ContactPage = () => {
             {/* Contact Information & Offices */}
             <div className="lg:col-span-5 space-y-8">
               <div>
-                <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-2">
-                  Direct Inquiries
+                <span className="inline-block text-sm sm:text-base tracking-wider mb-2">
+                  <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Direct</span>{' '}
+                  <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Inquiries</span>
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
                   We'd love to hear from you.
@@ -157,8 +159,9 @@ const ContactPage = () => {
             {/* Interactive Form Card */}
             <div className="lg:col-span-7">
               <div className="p-8 sm:p-12 rounded-3xl bg-white border border-neutral-200/80 shadow-xl">
-                <span className="text-xs uppercase font-mono font-bold tracking-widest text-neutral-400 block mb-2">
-                  Project Request
+                <span className="inline-block text-sm tracking-wider mb-2">
+                  <span className="font-serif-italic font-normal text-base text-neutral-700">Project</span>{' '}
+                  <span className="font-sans font-extrabold uppercase tracking-widest text-xs text-neutral-900">Request</span>
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-2">
                   Send Us a Message

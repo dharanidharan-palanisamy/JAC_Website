@@ -96,8 +96,9 @@ const ProcessSection = () => {
     <section className="py-24 sm:py-32 bg-[#F1F1EF]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-            How We Deliver
+          <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+            <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Our</span>{' '}
+            <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Process</span>
           </span>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
             A transparent 5-step process{' '}

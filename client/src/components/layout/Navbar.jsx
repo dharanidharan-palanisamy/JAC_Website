@@ -129,6 +129,7 @@ const Navbar = () => {
   const standardNavLinks = [
     { name: 'Our Work', path: '/portfolio' },
     { name: 'About Us', path: '/about' },
+    { name: 'Careers', path: '/careers' },
     { name: 'Other Services', path: '/other-services' }
   ];
 
@@ -150,7 +151,7 @@ const Navbar = () => {
               className="w-8 h-8 sm:w-9 sm:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
             />
             <div className="flex flex-col leading-none">
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-neutral-900 group-hover:opacity-80 transition-opacity font-sans">
+              <span className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 group-hover:opacity-80 transition-opacity font-sans">
                 JAC MediaLand
               </span>
               <span className="text-[11px] sm:text-xs font-medium text-neutral-500 tracking-normal mt-0.5">
@@ -160,47 +161,29 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-7">
+          <div className="hidden lg:flex items-center gap-7 xl:gap-8">
             {/* Services Dropdown Trigger */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('services')}
               onMouseLeave={handleMouseLeave}
             >
-              <div
-                className={`text-sm font-medium transition-all duration-200 py-1.5 flex items-center gap-1 ${
+              <Link
+                to="/services"
+                onClick={() => setActiveDropdown(null)}
+                className={`text-[15px] font-medium transition-colors duration-200 py-1.5 flex items-center gap-1 cursor-pointer select-none ${
                   isServicesActive || activeDropdown === 'services'
-                    ? 'text-black font-semibold'
-                    : 'text-neutral-600 hover:text-black'
+                    ? 'text-black'
+                    : 'text-neutral-900 hover:text-black'
                 }`}
               >
-                <Link
-                  to="/services"
-                  onClick={() => setActiveDropdown(null)}
-                  className="flex items-center gap-1.5 cursor-pointer"
-                >
-                  {/* Active/Reference Dot indicator matching reference */}
-                  {(isServicesActive || activeDropdown === 'services') && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
-                  )}
-                  <span>Services</span>
-                </Link>
-                <button
-                  type="button"
-                  aria-label="Toggle Services menu"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveDropdown(activeDropdown === 'services' ? null : 'services');
-                  }}
-                  className="p-0.5 cursor-pointer flex items-center justify-center text-inherit hover:opacity-75 transition-opacity"
-                >
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      activeDropdown === 'services' ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-              </div>
+                <span>Services</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-neutral-400 stroke-[1.75] transition-transform duration-200 ${
+                    activeDropdown === 'services' ? 'rotate-180 text-black' : ''
+                  }`}
+                />
+              </Link>
 
               {/* Services Dropdown Menu */}
               <AnimatePresence>
@@ -213,9 +196,10 @@ const Navbar = () => {
                     className="absolute top-full left-1/2 -translate-x-1/3 pt-3 w-[560px] z-[120]"
                   >
                     <div className="rounded-3xl bg-white border border-neutral-200/90 shadow-2xl p-6 backdrop-blur-xl">
-                      <div className="pb-3 mb-3 border-b border-neutral-100">
-                        <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-bold">
-                          Core Capabilities
+                      <div className="pb-3 mb-3 border-b border-neutral-100 flex items-center justify-between">
+                        <span className="text-sm font-semibold tracking-wide flex items-center gap-1.5">
+                          <span className="font-serif-italic text-base font-normal text-neutral-700">Our</span>{' '}
+                          <span className="font-sans font-extrabold text-xs uppercase tracking-widest text-neutral-900">Services</span>
                         </span>
                       </div>
 
@@ -266,46 +250,28 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-            {/* Products Dropdown Trigger (with Reference Dot Indicator) */}
+            {/* Products Dropdown Trigger */}
             <div
               className="relative"
               onMouseEnter={() => handleMouseEnter('products')}
               onMouseLeave={handleMouseLeave}
             >
-              <div
-                className={`text-sm font-medium transition-all duration-200 py-1.5 flex items-center gap-1 ${
+              <Link
+                to="/products"
+                onClick={() => setActiveDropdown(null)}
+                className={`text-[15px] font-medium transition-colors duration-200 py-1.5 flex items-center gap-1 cursor-pointer select-none ${
                   isProductsActive || activeDropdown === 'products'
-                    ? 'text-black font-semibold'
-                    : 'text-neutral-600 hover:text-black'
+                    ? 'text-black'
+                    : 'text-neutral-900 hover:text-black'
                 }`}
               >
-                <Link
-                  to="/products"
-                  onClick={() => setActiveDropdown(null)}
-                  className="flex items-center gap-1.5 cursor-pointer"
-                >
-                  {/* Active/Reference Dot indicator matching reference */}
-                  {(isProductsActive || activeDropdown === 'products') && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
-                  )}
-                  <span>Products</span>
-                </Link>
-                <button
-                  type="button"
-                  aria-label="Toggle Products menu"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveDropdown(activeDropdown === 'products' ? null : 'products');
-                  }}
-                  className="p-0.5 cursor-pointer flex items-center justify-center text-inherit hover:opacity-75 transition-opacity"
-                >
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      activeDropdown === 'products' ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-              </div>
+                <span>Products</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-neutral-400 stroke-[1.75] transition-transform duration-200 ${
+                    activeDropdown === 'products' ? 'rotate-180 text-black' : ''
+                  }`}
+                />
+              </Link>
 
               {/* Products Dropdown Menu */}
               <AnimatePresence>
@@ -318,9 +284,10 @@ const Navbar = () => {
                     className="absolute top-full left-1/2 -translate-x-1/2 pt-3 w-[520px] z-[120]"
                   >
                     <div className="rounded-3xl bg-white border border-neutral-200/90 shadow-2xl p-6 backdrop-blur-xl">
-                      <div className="pb-3 mb-3 border-b border-neutral-100">
-                        <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-bold">
-                          Proprietary Platforms
+                      <div className="pb-3 mb-3 border-b border-neutral-100 flex items-center justify-between">
+                        <span className="text-sm font-semibold tracking-wide flex items-center gap-1.5">
+                          <span className="font-serif-italic text-base font-normal text-neutral-700">Our</span>{' '}
+                          <span className="font-sans font-extrabold text-xs uppercase tracking-widest text-neutral-900">Products</span>
                         </span>
                       </div>
 
@@ -377,11 +344,10 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`text-sm font-medium transition-all duration-200 relative py-1 flex items-center gap-1.5 ${
-                    active ? 'text-black font-semibold' : 'text-neutral-600 hover:text-black'
+                  className={`text-[15px] font-medium transition-colors duration-200 py-1.5 flex items-center cursor-pointer select-none ${
+                    active ? 'text-black font-semibold' : 'text-neutral-900 hover:text-black'
                   }`}
                 >
-                  {active && <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />}
                   <span>{link.name}</span>
                 </Link>
               );
@@ -389,10 +355,10 @@ const Navbar = () => {
           </div>
 
           {/* Action CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
             <Link
               to="/contact"
-              className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full border border-black bg-transparent text-black hover:bg-black hover:text-white transition-all duration-300 shadow-xs cursor-pointer overflow-hidden"
+              className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 text-[15px] font-semibold rounded-full border border-black bg-transparent text-black hover:bg-black hover:text-white transition-all duration-300 shadow-xs cursor-pointer overflow-hidden"
             >
               <span>Get in touch</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -400,7 +366,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center z-[102]">
+          <div className="lg:hidden flex items-center z-[102]">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2.5 rounded-full border border-black/15 text-neutral-800 hover:bg-black/5 transition-colors focus:outline-none cursor-pointer"
@@ -420,7 +386,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="md:hidden fixed inset-0 top-0 z-[99] bg-[#FBFBFA] flex flex-col justify-between pt-24 pb-8 px-6 overflow-y-auto"
+            className="lg:hidden fixed inset-0 top-0 z-[99] bg-[#FBFBFA] flex flex-col justify-between pt-24 pb-8 px-6 overflow-y-auto"
           >
             <div className="flex flex-col gap-4 mt-2">
               <span className="text-xs uppercase tracking-widest text-neutral-400 font-semibold mb-2">
@@ -435,7 +401,6 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-2 flex-1"
                   >
-                    {isServicesActive && <span className="w-2 h-2 rounded-full bg-black shrink-0" />}
                     <span>Services</span>
                   </Link>
                   <button
@@ -491,7 +456,6 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-2 flex-1"
                   >
-                    {isProductsActive && <span className="w-2 h-2 rounded-full bg-black shrink-0" />}
                     <span>Products</span>
                   </Link>
                   <button

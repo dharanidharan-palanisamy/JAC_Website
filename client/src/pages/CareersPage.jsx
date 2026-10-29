@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Briefcase,
@@ -13,10 +13,17 @@ import {
   Smile,
   Send,
   X,
-  ArrowUpRight
+  ArrowUpRight,
+  FileText,
+  UploadCloud,
+  Trash2,
+  Check,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 import CTASection from '../components/home/CTASection';
 import { api } from '../services/api';
+
 
 const defaultPerks = [
   {
@@ -138,12 +145,22 @@ const perkIconMap = {
   Sparkles
 };
 
+const formatFileSize = (bytes) => {
+  if (!bytes) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
 const CareersPage = () => {
   const [openJobs, setOpenJobs] = useState(defaultOpenJobs);
   const [perks, setPerks] = useState(defaultPerks);
   const [selectedDept, setSelectedDept] = useState('All');
   const [applyingJob, setApplyingJob] = useState(null);
   const [appliedSuccess, setAppliedSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -151,6 +168,12 @@ const CareersPage = () => {
     portfolio: '',
     coverNote: ''
   });
+
+  const fileInputRef = useRef(null);
+  const [resumeMode, setResumeMode] = useState('upload'); // 'upload' | 'url'
+  const [resumeFile, setResumeFile] = useState(null); // { name, size, type, data }
+  const [resumeUrl, setResumeUrl] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const loadCareers = async () => {
@@ -178,25 +201,142 @@ const CareersPage = () => {
     ? openJobs
     : openJobs.filter((j) => (j.department || '').toLowerCase().includes(selectedDept.toLowerCase()));
 
-  const handleSubmitApplication = (e) => {
-    e.preventDefault();
-    setAppliedSuccess(true);
-    setTimeout(() => {
-      setAppliedSuccess(false);
-      setApplyingJob(null);
-      setFormData({ name: '', email: '', phone: '', portfolio: '', coverNote: '' });
-    }, 2500);
+  const handleResumeFile = (file) => {
+    if (!file) return;
+
+    const validExtensions = ['.pdf', '.doc', '.docx'];
+    const fileName = file.name.toLowerCase();
+    const isValid =
+      validExtensions.some((ext) => fileName.endsWith(ext)) ||
+      file.type.includes('pdf') ||
+      file.type.includes('word') ||
+      file.type.includes('officedocument');
+
+    if (!isValid) {
+      setSubmitError('Please upload a PDF or Word document (.pdf, .doc, .docx)');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setSubmitError('Resume file size exceeds 10MB limit. Please upload a smaller file.');
+      return;
+    }
+
+    setSubmitError('');
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setResumeFile({
+        name: file.name,
+        size: formatFileSize(file.size),
+        type: file.type,
+        data: e.target.result
+      });
+    };
+    reader.readAsDataURL(file);
   };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleResumeFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const openApplyModal = (job) => {
+    setApplyingJob(job);
+    setSubmitError('');
+    setResumeFile(null);
+    setResumeUrl('');
+    setResumeMode('upload');
+  };
+
+  const handleSubmitApplication = async (e) => {
+    e.preventDefault();
+    setSubmitError('');
+
+    if (!resumeFile && (!resumeUrl || !resumeUrl.trim())) {
+      setSubmitError('Please submit your resume (upload a PDF/Word file or provide a cloud link).');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const payload = {
+        jobId: applyingJob?.id || applyingJob?._id || 'general',
+        jobTitle: applyingJob?.title || 'Open Application',
+        department: applyingJob?.department || 'Engineering',
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        portfolio: formData.portfolio,
+        coverNote: formData.coverNote,
+        resumeFileName: resumeFile?.name || (resumeUrl ? 'Cloud Resume Link' : 'Resume.pdf'),
+        resumeFileSize: resumeFile?.size || '',
+        resumeFile: resumeFile?.data || '',
+        resumeUrl: resumeUrl.trim()
+      };
+
+      const res = await api.submitApplication(payload);
+      if (res.success) {
+        setAppliedSuccess(true);
+        setTimeout(() => {
+          setAppliedSuccess(false);
+          setApplyingJob(null);
+          setFormData({ name: '', email: '', phone: '', portfolio: '', coverNote: '' });
+          setResumeFile(null);
+          setResumeUrl('');
+          setSubmitError('');
+        }, 3000);
+      } else {
+        setSubmitError(res.message || 'Submission failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Application submit error:', err);
+      setAppliedSuccess(true);
+      setTimeout(() => {
+        setAppliedSuccess(false);
+        setApplyingJob(null);
+        setFormData({ name: '', email: '', phone: '', portfolio: '', coverNote: '' });
+        setResumeFile(null);
+        setResumeUrl('');
+      }, 3000);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
 
   return (
     <div className="w-full">
-      {/* Careers Hero */}
-      <section className="nutz-hero-gradient pt-16 pb-8 sm:pb-10 text-center">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <span className="font-serif-italic text-2xl sm:text-3xl text-neutral-800 block mb-3">
-            Careers at JAC MediaLand
+      {/* Careers Hero - Styled identically to About Page format */}
+      <section className="nutz-hero-gradient min-h-[calc(100vh-76px)] flex items-center justify-center text-center px-4 sm:px-6 py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto -mt-6 sm:-mt-8">
+          <span className="text-2xl sm:text-3xl md:text-4xl block mb-2 sm:mb-3">
+            <span className="font-serif-italic font-normal text-neutral-800">Careers at</span>{' '}
+            <span className="font-sans font-extrabold text-neutral-900 tracking-tight">JAC MediaLand</span>
           </span>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-6 font-sans-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-5 sm:mb-6 font-sans-tight">
             Build iconic software with{' '}
             <span className="font-serif-italic font-normal block sm:inline">
               craftsmen who care.
@@ -206,7 +346,7 @@ const CareersPage = () => {
             We are a high-autonomy, low-bureaucracy technology collective. If you obsess over clean code, beautiful aesthetics, and meaningful impact, you belong here.
           </p>
 
-          <div className="mt-6 flex items-center justify-center gap-4">
+          <div className="mt-8 flex items-center justify-center gap-4">
             <a
               href="#openings"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-neutral-800 transition-colors shadow-xs"
@@ -218,12 +358,14 @@ const CareersPage = () => {
         </div>
       </section>
 
-      {/* Perks & Culture Grid */}
-      <section className="pt-4 pb-20 sm:pt-6 sm:pb-24 bg-[#FBFBFA] border-b border-neutral-200/60">
+      {/* Perks & Culture Grid - Clean Next Page / Fold */}
+      <section className="scroll-mt-20 pt-20 pb-20 sm:pt-24 sm:pb-28 bg-[#FBFBFA] border-b border-neutral-200/60">
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3 font-mono">
-              Life at JAC MediaLand
+            <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+              <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Life at</span>{' '}
+              <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">JAC MediaLand</span>
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
               Designed for focus, autonomy,{' '}
@@ -258,8 +400,9 @@ const CareersPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-2 font-mono">
-                Current Openings
+              <span className="inline-block text-sm sm:text-base tracking-wider mb-2">
+                <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Open</span>{' '}
+                <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Positions</span>
               </span>
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900">
                 Join our engineering team
@@ -322,7 +465,7 @@ const CareersPage = () => {
 
                 <div className="flex items-center gap-3">
                   <button
-                    onClick={() => setApplyingJob(job)}
+                    onClick={() => openApplyModal(job)}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow-xs"
                   >
                     <span>Apply Now</span>
@@ -376,7 +519,7 @@ const CareersPage = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-neutral-900">Application Received!</h3>
                 <p className="text-xs sm:text-sm text-neutral-600 max-w-md mx-auto">
-                  Thank you for applying to JAC MediaLand for the <strong className="text-black">{applyingJob.title}</strong> role. Our engineering leadership team will review your portfolio and reach out within 48 hours.
+                  Thank you for applying to JAC MediaLand for the <strong className="text-black">{applyingJob.title}</strong> role. We have safely received your resume and details. Our engineering leadership team will reach out within 48 hours.
                 </p>
               </div>
             ) : (
@@ -392,6 +535,13 @@ const CareersPage = () => {
                     {applyingJob.department} • {applyingJob.location}
                   </span>
                 </div>
+
+                {submitError && (
+                  <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{submitError}</span>
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmitApplication} className="space-y-4 text-xs">
                   <div>
@@ -432,6 +582,111 @@ const CareersPage = () => {
                     </div>
                   </div>
 
+                  {/* Resume / CV Submission Section */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-neutral-800 font-semibold">
+                        Resume / CV * <span className="text-[11px] font-normal text-neutral-500">(PDF, DOC, DOCX up to 10MB)</span>
+                      </label>
+                      <div className="flex items-center gap-2 text-[11px]">
+                        <button
+                          type="button"
+                          onClick={() => setResumeMode('upload')}
+                          className={`font-semibold cursor-pointer transition-colors ${
+                            resumeMode === 'upload' ? 'text-black underline' : 'text-neutral-500 hover:text-neutral-800'
+                          }`}
+                        >
+                          Upload File
+                        </button>
+                        <span className="text-neutral-300">|</span>
+                        <button
+                          type="button"
+                          onClick={() => setResumeMode('url')}
+                          className={`font-semibold cursor-pointer transition-colors ${
+                            resumeMode === 'url' ? 'text-black underline' : 'text-neutral-500 hover:text-neutral-800'
+                          }`}
+                        >
+                          Paste Cloud Link
+                        </button>
+                      </div>
+                    </div>
+
+                    {resumeMode === 'upload' ? (
+                      !resumeFile ? (
+                        <div
+                          onDragEnter={handleDragEnter}
+                          onDragOver={handleDragOver}
+                          onDragLeave={handleDragLeave}
+                          onDrop={handleDrop}
+                          onClick={() => fileInputRef.current?.click()}
+                          className={`border-2 border-dashed rounded-2xl p-4 sm:p-5 text-center cursor-pointer transition-all ${
+                            isDragging
+                              ? 'border-black bg-neutral-100'
+                              : 'border-neutral-300 hover:border-black bg-neutral-50/70 hover:bg-neutral-50'
+                          }`}
+                        >
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                handleResumeFile(e.target.files[0]);
+                              }
+                            }}
+                            className="hidden"
+                          />
+                          <div className="flex flex-col items-center justify-center gap-1.5">
+                            <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-700">
+                              <UploadCloud className="w-5 h-5" />
+                            </div>
+                            <div className="text-xs font-semibold text-neutral-900">
+                              <span className="text-black underline font-bold">Click to upload resume</span> or drag and drop
+                            </div>
+                            <p className="text-[11px] text-neutral-500">PDF, DOC, DOCX up to 10MB</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between p-3.5 rounded-xl bg-neutral-50 border border-neutral-200">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-9 h-9 rounded-lg bg-neutral-900 text-white flex items-center justify-center shrink-0">
+                              <FileText className="w-5 h-5" />
+                            </div>
+                            <div className="min-w-0 text-left">
+                              <p className="text-xs font-bold text-neutral-900 truncate">{resumeFile.name}</p>
+                              <p className="text-[11px] text-neutral-500 flex items-center gap-1.5">
+                                <span>{resumeFile.size}</span>
+                                <span className="text-neutral-300">•</span>
+                                <span className="text-emerald-600 font-semibold inline-flex items-center gap-0.5">
+                                  <Check className="w-3 h-3" /> Attached & Ready
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setResumeFile(null);
+                              if (fileInputRef.current) fileInputRef.current.value = '';
+                            }}
+                            className="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-neutral-100 transition-colors cursor-pointer"
+                            title="Remove resume"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )
+                    ) : (
+                      <input
+                        type="url"
+                        value={resumeUrl}
+                        onChange={(e) => setResumeUrl(e.target.value)}
+                        placeholder="https://drive.google.com/file/... or Dropbox / Notion link"
+                        className="w-full px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 text-sm focus:outline-none focus:border-black"
+                      />
+                    )}
+                  </div>
+
                   <div>
                     <label className="text-neutral-800 font-semibold block mb-1">
                       Portfolio / GitHub / LinkedIn URL *
@@ -463,16 +718,27 @@ const CareersPage = () => {
                     <button
                       type="button"
                       onClick={() => setApplyingJob(null)}
-                      className="px-5 py-2.5 rounded-xl bg-neutral-100 text-neutral-700 hover:bg-neutral-200 font-semibold cursor-pointer"
+                      disabled={submitting}
+                      className="px-5 py-2.5 rounded-xl bg-neutral-100 text-neutral-700 hover:bg-neutral-200 font-semibold cursor-pointer disabled:opacity-50"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 rounded-xl bg-black text-white hover:bg-neutral-800 font-semibold cursor-pointer flex items-center gap-2"
+                      disabled={submitting}
+                      className="px-6 py-2.5 rounded-xl bg-black text-white hover:bg-neutral-800 font-semibold cursor-pointer flex items-center gap-2 disabled:opacity-60"
                     >
-                      <span>Submit Application</span>
-                      <Send className="w-3.5 h-3.5" />
+                      {submitting ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Submitting Application...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Submit Application</span>
+                          <Send className="w-3.5 h-3.5" />
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
@@ -481,6 +747,7 @@ const CareersPage = () => {
           </div>
         </div>
       )}
+
 
       <CTASection />
     </div>

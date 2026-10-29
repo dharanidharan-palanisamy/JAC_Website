@@ -71,7 +71,7 @@ const ProjectDetailPage = () => {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.08] mb-6 font-sans-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-neutral-900 tracking-tight leading-[1.08] mb-6 font-sans">
             {project.title}
           </h1>
 
@@ -82,13 +82,15 @@ const ProjectDetailPage = () => {
           {/* Quick Meta Row */}
           <div className="flex flex-wrap items-center gap-8 mt-10 pt-6 border-t border-black/10 text-sm">
             <div>
-              <span className="text-neutral-500 block text-xs">Client</span>
-              <span className="font-semibold text-neutral-900">{project.client}</span>
-            </div>
-            <div>
               <span className="text-neutral-500 block text-xs">Discipline</span>
               <span className="font-semibold text-neutral-900">{project.category}</span>
             </div>
+            {project.year && (
+              <div>
+                <span className="text-neutral-500 block text-xs">Year</span>
+                <span className="font-semibold text-neutral-900">{project.year}</span>
+              </div>
+            )}
             {project.liveUrl && (
               <div>
                 <span className="text-neutral-500 block text-xs">Live Platform</span>
@@ -121,30 +123,14 @@ const ProjectDetailPage = () => {
       {/* Case Study Deep Dive */}
       <section className="py-24 bg-[#FBFBFA]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          {/* Results Metric Banner */}
-          {project.results && project.results.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 p-8 rounded-3xl bg-neutral-900 text-white mb-20 shadow-xl">
-              {project.results.map((res, rIdx) => (
-                <div key={rIdx} className="text-center p-4">
-                  <span className="text-3xl sm:text-5xl font-extrabold text-amber-300 block mb-1 font-sans-tight">
-                    {res.metric}
-                  </span>
-                  <span className="text-xs sm:text-sm text-neutral-300 uppercase tracking-wider font-medium">
-                    {res.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
           {/* Challenge and Solution */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
             <div className="p-8 sm:p-10 rounded-3xl bg-white border border-neutral-200/80 shadow-xs">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-400 block mb-2">
+              <span className="text-xs font-serif italic text-neutral-500 block mb-2">
                 The Objective
               </span>
-              <h3 className="text-2xl font-bold text-neutral-900 mb-4">
-                The Challenge
+              <h3 className="text-2xl font-extrabold text-neutral-900 mb-4 font-sans">
+                <span className="font-serif italic font-normal text-neutral-500 mr-2">The</span>Challenge
               </h3>
               <p className="text-neutral-600 text-base leading-relaxed whitespace-pre-line">
                 {project.challenge || 'Developing a high-performance solution that handles complex operational logic while maintaining a seamless user experience.'}
@@ -152,11 +138,11 @@ const ProjectDetailPage = () => {
             </div>
 
             <div className="p-8 sm:p-10 rounded-3xl bg-white border border-neutral-200/80 shadow-xs">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-400 block mb-2">
+              <span className="text-xs font-serif italic text-neutral-500 block mb-2">
                 Our Engineering
               </span>
-              <h3 className="text-2xl font-bold text-neutral-900 mb-4">
-                The Solution
+              <h3 className="text-2xl font-extrabold text-neutral-900 mb-4 font-sans">
+                <span className="font-serif italic font-normal text-neutral-500 mr-2">The</span>Solution
               </h3>
               <p className="text-neutral-600 text-base leading-relaxed whitespace-pre-line">
                 {project.solution || 'Engineered a modern modular architecture using clean component design, optimized state management, and robust backend integrations.'}
@@ -166,8 +152,8 @@ const ProjectDetailPage = () => {
 
           {/* Tech Stack */}
           <div className="mb-20 text-center">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-400 block mb-4">
-              Technologies & Infrastructure
+            <span className="text-xs font-serif italic text-neutral-500 block mb-4">
+              Technologies &amp; Infrastructure
             </span>
             <div className="flex flex-wrap items-center justify-center gap-3">
               {(project.techStack || []).map((t, idx) => (
@@ -184,8 +170,8 @@ const ProjectDetailPage = () => {
           {/* Gallery Showcase */}
           {project.gallery && project.gallery.length > 0 && (
             <div className="space-y-8 mb-20">
-              <h3 className="text-2xl font-bold text-neutral-900 text-center">
-                Visual Artifacts & Interface Gallery
+              <h3 className="text-2xl font-extrabold text-neutral-900 text-center font-sans">
+                <span className="font-serif italic font-normal text-neutral-500 mr-2">Interface</span>Gallery
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {project.gallery.map((imgUrl, gIdx) => (

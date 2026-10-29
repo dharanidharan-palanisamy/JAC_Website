@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Code, Cpu, Shield, Sparkles, Award, Globe2, Target, ArrowUpRight, Briefcase } from 'lucide-react';
 import CTASection from '../components/home/CTASection';
+
+
 import { api } from '../services/api';
 
 const defaultTeamMembers = [
@@ -82,12 +84,6 @@ const aboutIconMap = {
   Target
 };
 
-const teamStrengths = [
-  { title: 'Full-Stack Developers', count: '14+', desc: 'Specializing in React, Next.js, Node.js, Python, PostgreSQL and Cloud' },
-  { title: 'Mobile Engineers', count: '6+', desc: 'Native & cross-platform Flutter and React Native specialists' },
-  { title: 'UI/UX & Brand Designers', count: '5+', desc: 'Design systems, prototyping, animation, and visual identities' },
-  { title: 'SEO & Growth Strategists', count: '4+', desc: 'Technical SEO, search semantics, and multi-channel paid acquisition' }
-];
 
 const AboutPage = () => {
   const [teamMembers, setTeamMembers] = useState(defaultTeamMembers);
@@ -120,12 +116,13 @@ const AboutPage = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="nutz-hero-gradient min-h-[calc(100vh-80px)] flex items-center justify-center text-center px-4 sm:px-6 py-16">
-        <div className="max-w-4xl mx-auto">
-          <span className="font-serif-italic text-2xl sm:text-3xl text-neutral-800 block mb-4">
-            {content?.heroEyebrow || 'About JAC MediaLand'}
+      <section className="nutz-hero-gradient min-h-[calc(100vh-76px)] flex items-center justify-center text-center px-4 sm:px-6 py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto -mt-6 sm:-mt-8">
+          <span className="text-2xl sm:text-3xl md:text-4xl block mb-2 sm:mb-3">
+            <span className="font-serif-italic font-normal text-neutral-800">About</span>{' '}
+            <span className="font-sans font-extrabold text-neutral-900 tracking-tight">JAC MediaLand</span>
           </span>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-6 font-sans-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-5 sm:mb-6 font-sans-tight">
             {content?.heroHeading || 'We exist to help ambitious brands'}{' '}
             <span className="font-serif-italic font-normal block sm:inline">
               {content?.heroHeadingItalic || 'dominate the digital world.'}
@@ -138,12 +135,17 @@ const AboutPage = () => {
       </section>
 
       {/* Story & Philosophy */}
-      <section className="pt-20 pb-24 sm:pt-28 sm:pb-32 bg-[#FBFBFA]">
+      <section id="our-narrative" className="scroll-mt-20 min-h-[calc(100vh-76px)] flex items-center pt-20 sm:pt-24 pb-20 sm:pb-28 bg-[#FBFBFA]">
+
+
+
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-6">
-              <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-                Our Narrative
+              <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+                <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Our</span>{' '}
+                <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Narrative</span>
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 leading-[1.15] mb-6">
                 Bridging the gap between{' '}
@@ -211,8 +213,9 @@ const AboutPage = () => {
       <section className="py-24 bg-[#F1F1EF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-              Principles We Live By
+            <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+              <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Our</span>{' '}
+              <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Core Values</span>
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
               Core values that guide{' '}
@@ -248,8 +251,9 @@ const AboutPage = () => {
       <section className="py-24 bg-[#FBFBFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3 font-mono">
-              The Minds Behind JAC MediaLand
+            <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+              <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Our</span>{' '}
+              <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Team</span>
             </span>
             <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
               Meet our team of{' '}
@@ -307,60 +311,9 @@ const AboutPage = () => {
               </div>
             ))}
           </div>
-
-          {/* Join Our Team Callout Banner */}
-          <div className="mt-16 p-8 sm:p-12 rounded-3xl bg-neutral-900 text-white flex flex-col md:flex-row items-center justify-between gap-6 border border-neutral-800 shadow-xl">
-            <div className="max-w-xl text-center md:text-left">
-              <span className="text-xs uppercase font-mono tracking-widest text-amber-300 font-bold block mb-1">
-                We're Growing
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                Want to build the future with us?
-              </h3>
-              <p className="text-neutral-400 text-xs sm:text-sm mt-1 leading-relaxed">
-                We are actively looking for talented full-stack engineers, UI/UX designers, and mobile architects in Chennai, Coimbatore, and remote.
-              </p>
-            </div>
-            <Link
-              to="/careers"
-              className="px-6 py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-black font-bold text-sm transition-colors shrink-0 inline-flex items-center gap-2 shadow-md cursor-pointer"
-            >
-              <Briefcase className="w-4 h-4" />
-              <span>Explore All Careers & Open Roles</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Team Capability Breakdown */}
-      <section className="py-24 bg-[#FBFBFA]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-              The Engineering Collective
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
-              Expertise that spans{' '}
-              <span className="font-serif-italic font-normal text-neutral-800">
-                the modern web stack.
-              </span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamStrengths.map((t, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-neutral-100/70 border border-neutral-200/60">
-                <span className="text-4xl font-extrabold text-neutral-900 font-sans-tight block mb-2">
-                  {t.count}
-                </span>
-                <h4 className="text-base font-bold text-neutral-900 mb-2">{t.title}</h4>
-                <p className="text-xs text-neutral-600 leading-relaxed">{t.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <CTASection />
     </div>

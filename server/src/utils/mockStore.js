@@ -1249,6 +1249,43 @@ let logos = [
   { id: 'logo-14', name: 'Brand Partner 14', src: '/Logos/optimized/14.png', order: 14, isActive: true }
 ];
 
+let applications = [
+  {
+    _id: 'app-1',
+    jobId: 'fullstack-sr',
+    jobTitle: 'Senior Full-Stack Engineer',
+    department: 'Engineering',
+    name: 'Aravind Swaminathan',
+    email: 'aravind.s@example.com',
+    phone: '+91 98401 54321',
+    portfolio: 'https://github.com/aravind-tech',
+    resumeFileName: 'Aravind_FullStack_Resume.pdf',
+    resumeFileSize: '240 KB',
+    resumeFile: '',
+    resumeUrl: 'https://drive.google.com/file/d/sample-resume',
+    coverNote: 'Architected multiple React & Node microservices with high throughput and sub-50ms latency.',
+    status: 'New',
+    createdAt: new Date(Date.now() - 86400000 * 2)
+  },
+  {
+    _id: 'app-2',
+    jobId: 'uiux-lead',
+    jobTitle: 'Lead UI/UX & Motion Designer',
+    department: 'Design',
+    name: 'Pooja Sundaram',
+    email: 'pooja.design@example.com',
+    phone: '+91 97890 12345',
+    portfolio: 'https://dribbble.com/poojasundaram',
+    resumeFileName: 'Pooja_Design_Portfolio_Resume.pdf',
+    resumeFileSize: '1.2 MB',
+    resumeFile: '',
+    resumeUrl: '',
+    coverNote: 'Passionate about typography, micro-interactions, and scalable design token architecture.',
+    status: 'Reviewing',
+    createdAt: new Date(Date.now() - 86400000 * 4)
+  }
+];
+
 module.exports = {
   adminUser,
   services,
@@ -1261,6 +1298,7 @@ module.exports = {
   teamMembers,
   careers,
   perks,
+  applications,
   programs,
   processSteps,
   engineeringStandards,
@@ -1270,3 +1308,4 @@ module.exports = {
   legalContent,
   logos
 };
+

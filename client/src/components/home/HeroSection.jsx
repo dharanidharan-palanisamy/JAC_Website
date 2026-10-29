@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 const HeroSection = ({ settings, homeContent }) => {
   return (
@@ -9,68 +8,48 @@ const HeroSection = ({ settings, homeContent }) => {
       {/* Decorative ambient elements */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/25 rounded-full blur-3xl pointer-events-none -z-0" />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center min-w-0">
         {/* Sub-badge / Motto */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-4 sm:mb-6"
-        >
-          <span className="font-serif-italic text-2xl sm:text-3xl md:text-4xl text-[#111111]/90 tracking-tight">
-            {homeContent?.heroTagline || 'Innovating for You, Building for Us.'}
+        <div className="mb-4 sm:mb-6 max-w-2xl w-full px-2 text-center min-w-0">
+          <span className="font-serif-italic text-base sm:text-2xl md:text-3xl text-neutral-800/90 tracking-tight font-normal block leading-snug">
+            {homeContent?.heroTagline || 'Creative Design & Full-Stack IT Solutions Agency'}
           </span>
-        </motion.div>
+        </div>
 
         {/* Main Hero Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="text-3xl sm:text-5xl md:text-6xl font-normal text-[#111111] leading-[1.14] tracking-tight mb-6 max-w-4xl"
-        >
-          <span className="font-sans-tight font-bold">
-            {homeContent?.heroHeading || 'Creative Design'}
+        <h1 className="w-full max-w-4xl min-w-0 text-2xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[76px] text-neutral-900 leading-[1.18] sm:leading-[1.08] tracking-tight mb-6 font-sans px-2 text-center">
+          <span className="font-extrabold tracking-[-0.035em] block sm:inline">
+            {homeContent?.heroHeading || 'Innovating Digital Possibilities,'}
           </span>{' '}
-          <span className="font-serif-italic font-normal block sm:inline">
-            {homeContent?.heroHeadingItalic || '& Full-Stack Agency'}
+          <span className="font-serif-italic font-normal block sm:inline text-neutral-800 tracking-[-0.01em]">
+            {homeContent?.heroHeadingItalic || 'Engineering Enterprise Growth.'}
           </span>
-        </motion.h1>
+        </h1>
 
         {/* Sub-headline description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-[#111111]/80 leading-relaxed font-sans-tight font-normal mb-8 px-2"
-        >
+        <p className="w-full max-w-2xl min-w-0 mx-auto text-sm sm:text-lg md:text-xl text-neutral-700 leading-relaxed font-sans font-normal mb-8 px-2 text-center">
           {homeContent?.heroDescription ||
             settings?.heroSubheading ||
             'From Coimbatore & Chennai, we engineer websites, mobile apps, and iconic digital products for startups and enterprises across India and worldwide.'}
-        </motion.p>
+        </p>
 
         {/* Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.45 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full max-w-2xl mx-auto"
-        >
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full max-w-md sm:max-w-2xl mx-auto px-2">
           <Link
             to={homeContent?.primaryCtaLink || '/contact'}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 text-base sm:text-lg font-medium rounded-full border-2 border-black bg-transparent text-black hover:bg-black hover:text-white transition-all duration-300 shadow-md group cursor-pointer whitespace-nowrap"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base md:text-lg font-semibold rounded-full border-2 border-black bg-black text-white hover:bg-neutral-800 hover:border-neutral-800 transition-all duration-300 shadow-md group cursor-pointer text-center"
           >
-            <span className="whitespace-nowrap">{homeContent?.primaryCtaText || 'Explore Services'}</span>
-            <ArrowRight className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+            <span>{homeContent?.primaryCtaText || 'Explore Services'}</span>
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
 
           <Link
             to={homeContent?.secondaryCtaLink || '/portfolio'}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base sm:text-lg font-medium rounded-full bg-white/70 hover:bg-white text-black border border-black/10 transition-all duration-300 backdrop-blur-xs whitespace-nowrap"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base md:text-lg font-semibold rounded-full bg-white hover:bg-neutral-100 text-black border border-neutral-300 transition-all duration-300 shadow-xs text-center"
           >
-            <span className="whitespace-nowrap">{homeContent?.secondaryCtaText || 'Schedule Technical Consultation'}</span>
+            <span>{homeContent?.secondaryCtaText || 'Schedule Technical Consultation'}</span>
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

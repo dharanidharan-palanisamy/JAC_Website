@@ -127,6 +127,122 @@ const deletePerk = async (req, res, next) => {
   }
 };
 
+// POST /api/careers/apply (Public applicant submission with resume)
+const submitApplication = async (req, res, next) => {
+  try {
+    const {
+      jobId,
+      jobTitle,
+      department,
+      name,
+      email,
+      phone,
+      portfolio,
+      resumeFileName,
+      resumeFileSize,
+      resumeFile,
+      resumeUrl,
+      coverNote
+    } = req.body;
+
+    if (!name || !email || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name, email, and phone number are required fields'
+      });
+    }
+
+    if (!resumeFile && !resumeUrl) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide your resume by uploading a file or supplying a link'
+      });
+    }
+
+    const applicationData = {
+      _id: `app-${Date.now()}`,
+      jobId: jobId || 'general',
+      jobTitle: jobTitle || 'General Application',
+      department: department || 'Engineering',
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      portfolio: (portfolio || '').trim(),
+      resumeFileName: resumeFileName || (resumeUrl ? 'Cloud Resume Link' : 'Resume.pdf'),
+      resumeFileSize: resumeFileSize || '',
+      resumeFile: resumeFile || '',
+      resumeUrl: resumeUrl || '',
+      coverNote: (coverNote || '').trim(),
+      status: 'New',
+      createdAt: new Date()
+    };
+
+    if (!mockStore.applications) {
+      mockStore.applications = [];
+    }
+    mockStore.applications.unshift(applicationData);
+
+    return res.status(201).json({
+      success: true,
+      message: 'Thank you! Your application and resume have been successfully submitted.',
+      data: applicationData
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// GET /api/careers/applications/admin (Admin list of applications)
+const getApplicationsAdmin = async (req, res, next) => {
+  try {
+    const list = mockStore.applications || [];
+    return res.status(200).json({
+      success: true,
+      count: list.length,
+      data: list
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// PUT /api/careers/applications/:id/status
+const updateApplicationStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!mockStore.applications) mockStore.applications = [];
+    const index = mockStore.applications.findIndex(a => a._id === id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+    mockStore.applications[index] = {
+      ...mockStore.applications[index],
+      status: status || mockStore.applications[index].status,
+      updatedAt: new Date()
+    };
+    return res.status(200).json({ success: true, data: mockStore.applications[index] });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// DELETE /api/careers/applications/:id
+const deleteApplication = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!mockStore.applications) mockStore.applications = [];
+    const index = mockStore.applications.findIndex(a => a._id === id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+    mockStore.applications.splice(index, 1);
+    return res.status(200).json({ success: true, message: 'Application deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getCareers,
   getAllCareersAdmin,
@@ -136,5 +252,10 @@ module.exports = {
   getPerks,
   createPerk,
   updatePerk,
-  deletePerk
+  deletePerk,
+  submitApplication,
+  getApplicationsAdmin,
+  updateApplicationStatus,
+  deleteApplication
 };
+

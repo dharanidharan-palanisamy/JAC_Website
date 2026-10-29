@@ -174,8 +174,9 @@ const OtherServicesPage = () => {
       {/* Hero Section */}
       <section className="nutz-hero-gradient min-h-[calc(100vh-80px)] flex items-center justify-center text-center px-4 sm:px-6 py-16">
         <div className="max-w-4xl mx-auto">
-          <span className="font-serif-italic text-2xl sm:text-3xl text-neutral-800 block mb-3">
-            Specialized & Extended Capabilities
+          <span className="text-2xl sm:text-3xl md:text-4xl block mb-3">
+            <span className="font-serif-italic font-normal text-neutral-800">Other</span>{' '}
+            <span className="font-sans font-extrabold text-neutral-900 tracking-tight">Services</span>
           </span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-6 font-sans-tight">
             Other enterprise IT services{' '}

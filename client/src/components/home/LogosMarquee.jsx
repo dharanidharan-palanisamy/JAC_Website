@@ -42,9 +42,9 @@ const LogosMarquee = () => {
   const row1Logos = logos;
   const row2Logos = [...logos].reverse();
   return (
-    <section className="py-14 sm:py-20 bg-[#FBFBFA] border-y border-neutral-200/60 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 text-center mb-12 sm:mb-14">
-        <span className="text-xs uppercase font-semibold tracking-widest text-neutral-400">
+    <section className="py-14 sm:py-20 bg-[#FBFBFA] border-y border-neutral-200/60 overflow-hidden w-full max-w-full">
+      <div className="max-w-7xl mx-auto px-4 text-center mb-12 sm:mb-14 w-full">
+        <span className="inline-block max-w-full text-xs uppercase font-semibold tracking-[0.15em] text-neutral-500 leading-relaxed px-2">
           Trusted by Innovative Startups &amp; Enterprise Teams Across the Globe
         </span>
       </div>

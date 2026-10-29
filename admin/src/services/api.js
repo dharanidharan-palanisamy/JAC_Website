@@ -409,6 +409,32 @@ export const api = {
     return res.json();
   },
 
+  // Career Applications
+  getApplicationsAdmin: async () => {
+    const res = await fetch(`${API_BASE}/careers/applications/admin`, {
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+  updateApplicationStatus: async (id, status) => {
+    const res = await fetch(`${API_BASE}/careers/applications/${id}/status`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify({ status })
+    });
+    return res.json();
+  },
+
+  deleteApplication: async (id) => {
+    const res = await fetch(`${API_BASE}/careers/applications/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    return res.json();
+  },
+
+
   // Programs
   getPrograms: async () => {
     const res = await fetch(`${API_BASE}/programs`);

@@ -18,6 +18,7 @@ import ProjectDetailPage from './pages/ProjectDetailPage';
 import ProcessPage from './pages/ProcessPage';
 import ProductsPage from './pages/ProductsPage';
 import CareersPage from './pages/CareersPage';
+import ProgramsPage from './pages/ProgramsPage';
 import ProgramDetailPage from './pages/ProgramDetailPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
@@ -27,9 +28,9 @@ import NotFoundPage from './pages/NotFoundPage';
 // Public Layout Wrapper with Navbar & Footer
 const PublicLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-[#FBFBFA] text-neutral-900 selection:bg-blue-100 selection:text-neutral-900">
+    <div className="flex flex-col min-h-screen w-full max-w-full overflow-x-hidden bg-[#FBFBFA] text-neutral-900 selection:bg-blue-100 selection:text-neutral-900">
       <Navbar />
-      <main className="grow">
+      <main className="grow w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
       <Footer />
@@ -55,6 +56,7 @@ function App() {
           <Route path="/process" element={<ProcessPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/careers" element={<CareersPage />} />
+          <Route path="/programs" element={<ProgramsPage />} />
           <Route path="/programs/:id" element={<ProgramDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />

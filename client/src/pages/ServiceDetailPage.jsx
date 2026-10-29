@@ -95,10 +95,10 @@ const ServiceDetailPage = () => {
             <div className="lg:col-span-7 space-y-10">
               {/* Service Hero Header */}
               <div>
-                <span className="text-xs uppercase font-bold tracking-widest text-neutral-500 block mb-3">
+                <span className="font-serif italic font-normal text-sm sm:text-base text-neutral-500 block mb-2">
                   {service.tagline || 'Specialized Engineering'}
                 </span>
-                <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.08] mb-6 font-sans-tight">
+                <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-neutral-900 tracking-tight leading-[1.08] mb-6 font-sans">
                   {service.title}
                 </h1>
                 <p className="text-neutral-700 text-lg sm:text-2xl leading-relaxed">
@@ -119,8 +119,8 @@ const ServiceDetailPage = () => {
 
               {/* Overview & Engineering Approach */}
               <div className="pt-8 border-t border-neutral-200/80">
-                <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
-                  Overview & Engineering Approach
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 mb-4 font-sans tracking-tight">
+                  <span className="font-serif italic font-normal text-neutral-500 mr-2">Service</span>Overview &amp; Approach
                 </h2>
                 <p className="text-neutral-600 text-base sm:text-lg leading-relaxed whitespace-pre-line">
                   {service.fullDescription}
@@ -129,8 +129,8 @@ const ServiceDetailPage = () => {
 
               {/* Deliverables Section */}
               <div className="p-8 rounded-3xl bg-white border border-neutral-200/80 shadow-xs">
-                <h3 className="text-xl font-bold text-neutral-900 mb-6">
-                  What You Receive (Deliverables)
+                <h3 className="text-xl font-extrabold text-neutral-900 mb-6 font-sans">
+                  <span className="font-serif italic font-normal text-neutral-500 mr-2">Key</span>Deliverables
                 </h3>
                 <div className="space-y-3">
                   {(service.deliverables || []).map((del, dIdx) => (
@@ -145,8 +145,8 @@ const ServiceDetailPage = () => {
               {/* Architectural Advantages */}
               {service.features && service.features.length > 0 && (
                 <div>
-                  <h3 className="text-2xl font-bold text-neutral-900 mb-6">
-                    Key Advantages
+                  <h3 className="text-2xl font-extrabold text-neutral-900 mb-6 font-sans">
+                    <span className="font-serif italic font-normal text-neutral-500 mr-2">Key</span>Advantages
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {service.features.map((feat, fIdx) => (
@@ -162,9 +162,9 @@ const ServiceDetailPage = () => {
               {/* Service FAQs */}
               {service.faq && service.faq.length > 0 && (
                 <div>
-                  <h3 className="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+                  <h3 className="text-2xl font-extrabold text-neutral-900 mb-6 font-sans flex items-center gap-2">
                     <HelpCircle className="w-6 h-6 text-neutral-400" />
-                    <span>Frequently Asked Questions</span>
+                    <span><span className="font-serif italic font-normal text-neutral-500 mr-2">Common</span>Questions</span>
                   </h3>
                   <div className="space-y-4">
                     {service.faq.map((f, qIdx) => (
@@ -183,11 +183,11 @@ const ServiceDetailPage = () => {
               <div className="rounded-3xl bg-neutral-900 text-white p-8 sm:p-10 shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
 
-                <span className="text-xs uppercase font-mono tracking-widest text-amber-300 block mb-2">
+                <span className="text-xs font-serif italic text-amber-300 block mb-2">
                   Ready to Start?
                 </span>
-                <h3 className="text-2xl font-bold mb-2">
-                  Request a Proposal for {service.title}
+                <h3 className="text-2xl font-extrabold mb-2 font-sans">
+                  <span className="font-serif italic font-normal text-neutral-300 mr-2">Request a</span>Proposal
                 </h3>
                 <p className="text-neutral-400 text-xs sm:text-sm mb-6 leading-relaxed">
                   Fill out your details below and our technical leads will review your requirements and provide an estimate within 24 hours.

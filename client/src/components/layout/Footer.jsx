@@ -21,7 +21,7 @@ const Footer = () => {
               className="w-9 h-9 sm:w-10 sm:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
             />
             <div className="flex flex-col leading-none">
-              <span className="text-2xl sm:text-3xl font-black tracking-tight text-white group-hover:text-neutral-200 transition-colors font-sans">
+              <span className="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-neutral-200 transition-colors font-sans">
                 JAC MediaLand
               </span>
               <span className="text-xs sm:text-sm font-medium text-neutral-400 tracking-normal mt-1">
@@ -35,12 +35,12 @@ const Footer = () => {
         </div>
 
         {/* Links Navigation (Equal Spacing Between Columns) */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 xl:gap-12 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 xl:gap-12 py-8">
           {/* Core Services */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4 flex items-center gap-1.5">
+            <h4 className="text-xs uppercase tracking-widest text-white mb-4 flex items-center gap-1.5 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              Core Services
+              <span className="font-serif-italic capitalize text-sm font-normal text-neutral-300">Our</span> <span className="font-sans font-bold">Services</span>
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-neutral-400">
               <li>
@@ -78,9 +78,9 @@ const Footer = () => {
 
           {/* Our Products */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4 flex items-center gap-1.5">
+            <h4 className="text-xs uppercase tracking-widest text-white mb-4 flex items-center gap-1.5 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              Our Products
+              <span className="font-serif-italic capitalize text-sm font-normal text-neutral-300">Our</span> <span className="font-sans font-bold">Products</span>
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-neutral-400">
               <li>
@@ -108,9 +108,9 @@ const Footer = () => {
 
           {/* Menu */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4 flex items-center gap-1.5">
+            <h4 className="text-xs uppercase tracking-widest text-white mb-4 flex items-center gap-1.5 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              Menu
+              <span className="font-serif-italic capitalize text-sm font-normal text-neutral-300">Quick</span> <span className="font-sans font-bold">Menu</span>
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-neutral-400">
               <li>
@@ -133,6 +133,17 @@ const Footer = () => {
                   About Us
                 </Link>
               </li>
+              <li>
+                <Link to="/careers" className="hover:text-white hover:translate-x-1 inline-block transition-all">
+                  Careers
+                </Link>
+              </li>
+              <li>
+                <Link to="/programs" className="hover:text-white hover:translate-x-1 inline-block transition-all">
+                  Our Programs
+                </Link>
+              </li>
+
               <li>
                 <Link to="/other-services" className="hover:text-white hover:translate-x-1 inline-block transition-all">
                   Other Services

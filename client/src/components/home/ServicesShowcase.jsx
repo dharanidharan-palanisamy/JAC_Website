@@ -22,8 +22,9 @@ const ServicesShowcase = ({ services = [] }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-              Capabilities & Services
+            <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+              <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Our</span>{' '}
+              <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Services</span>
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
               Digital solutions{' '}

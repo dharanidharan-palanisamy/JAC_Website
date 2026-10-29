@@ -17,8 +17,9 @@ const FeaturedProjects = ({ projects = [] }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div>
-            <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-              Case Studies & Portfolio
+            <span className="inline-block text-sm sm:text-base tracking-wider mb-3">
+              <span className="font-serif-italic font-normal text-lg sm:text-xl text-neutral-700">Our</span>{' '}
+              <span className="font-sans font-extrabold uppercase tracking-widest text-xs sm:text-sm text-neutral-900">Work</span>
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
               Work that creates{' '}
@@ -47,7 +48,7 @@ const FeaturedProjects = ({ projects = [] }) => {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
           <AnimatePresence>
             {filtered.slice(0, 3).map((project, idx) => (
               <motion.div
@@ -76,35 +77,23 @@ const FeaturedProjects = ({ projects = [] }) => {
                 </div>
 
                 {/* Information Card Body */}
-                <div className="p-5 sm:p-6 flex flex-col justify-between grow">
+                <div className="p-3.5 sm:p-4 flex flex-col justify-between grow">
                   <div>
-                    <span className="text-xs font-mono font-medium text-neutral-400 block mb-1.5 uppercase tracking-wider">
-                      Client: {project.client}
-                    </span>
-                    <h3 className="text-lg sm:text-xl font-bold text-neutral-900 mb-2 group-hover:text-neutral-700 transition-colors">
+                    <h3 className="text-lg sm:text-xl font-bold text-neutral-900 mb-1.5 group-hover:text-neutral-700 transition-colors">
                       <Link to={`/portfolio/${project.slug}`}>
                         {project.title}
                       </Link>
                     </h3>
-                    <p className="text-neutral-600 text-sm leading-relaxed mb-4 line-clamp-2">
+                    <p className="text-neutral-600 text-sm leading-relaxed mb-3 line-clamp-2">
                       {project.summary}
                     </p>
                   </div>
 
                   {/* Highlights / Results Badges */}
-                  <div className="pt-3.5 border-t border-neutral-100 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {(project.results || []).slice(0, 2).map((res, rIdx) => (
-                        <div key={rIdx} className="flex flex-col">
-                          <span className="text-base sm:text-lg font-bold text-black font-sans-tight">{res.metric}</span>
-                          <span className="text-[10px] sm:text-[11px] text-neutral-500 uppercase">{res.label}</span>
-                        </div>
-                      ))}
-                    </div>
-
+                  <div className="pt-3 border-t border-neutral-100 flex items-center justify-end">
                     <Link
                       to={`/portfolio/${project.slug}`}
-                      className="text-xs font-semibold text-neutral-900 hover:text-black flex items-center gap-1 group/btn"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-black bg-white text-xs font-semibold text-black hover:bg-black hover:text-white transition-all duration-200 group/btn shrink-0"
                     >
                       <span>Read Case Study</span>
                       <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" />

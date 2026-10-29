@@ -256,6 +256,16 @@ export const api = {
     return res.json();
   },
 
+  submitApplication: async (applicationData) => {
+    const res = await fetch(`${API_BASE}/careers/apply`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(applicationData)
+    });
+    return res.json();
+  },
+
+
   // Programs
   getPrograms: async () => {
     const res = await fetch(`${API_BASE}/programs`);

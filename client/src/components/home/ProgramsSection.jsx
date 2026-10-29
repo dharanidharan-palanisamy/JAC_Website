@@ -108,9 +108,17 @@ const ProgramsSection = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="text-xs uppercase font-bold tracking-widest text-neutral-400 block mb-3">
-            Our Programs
-          </span>
+          <Link
+            to="/programs"
+            className="inline-flex items-center gap-2 group mb-4 cursor-pointer"
+            title="Click to view all programs"
+          >
+            <span className="font-serif-italic font-normal text-2xl sm:text-3xl text-neutral-800">Our</span>{' '}
+            <span className="font-sans font-extrabold uppercase tracking-widest text-lg sm:text-xl md:text-2xl text-neutral-900 group-hover:text-black border-b-2 border-neutral-900/40 group-hover:border-neutral-900 transition-all pb-0.5">
+              Programs
+            </span>
+            <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-800 group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </Link>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
             Empowering talent &amp;{' '}
             <span className="font-serif-italic font-normal text-neutral-800">

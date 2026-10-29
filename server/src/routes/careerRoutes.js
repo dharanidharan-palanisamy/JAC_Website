@@ -9,13 +9,23 @@ const {
   getPerks,
   createPerk,
   updatePerk,
-  deletePerk
+  deletePerk,
+  submitApplication,
+  getApplicationsAdmin,
+  updateApplicationStatus,
+  deleteApplication
 } = require('../controllers/careerController');
 const { protect } = require('../middleware/auth');
 
 // Public
 router.get('/', getCareers);
 router.get('/perks', getPerks);
+router.post('/apply', submitApplication);
+
+// Admin protected - Applications
+router.get('/applications/admin', protect, getApplicationsAdmin);
+router.put('/applications/:id/status', protect, updateApplicationStatus);
+router.delete('/applications/:id', protect, deleteApplication);
 
 // Admin protected - Jobs
 router.get('/admin/all', protect, getAllCareersAdmin);
@@ -29,3 +39,4 @@ router.put('/perks/:id', protect, updatePerk);
 router.delete('/perks/:id', protect, deletePerk);
 
 module.exports = router;
+

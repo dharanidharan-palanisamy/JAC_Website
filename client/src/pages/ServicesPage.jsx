@@ -38,8 +38,9 @@ const ServicesPage = () => {
       {/* Services Hero */}
       <section className="nutz-hero-gradient pt-16 pb-8 sm:pb-10 text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <span className="font-serif-italic text-2xl sm:text-3xl text-neutral-800 block mb-3">
-            Our Disciplines & Capabilities
+          <span className="text-2xl sm:text-3xl md:text-4xl block mb-3">
+            <span className="font-serif-italic font-normal text-neutral-800">Our</span>{' '}
+            <span className="font-sans font-extrabold text-neutral-900 tracking-tight">Services</span>
           </span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-6 font-sans-tight">
             Comprehensive IT solutions{' '}
