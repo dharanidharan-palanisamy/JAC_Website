@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProcessSection from '../components/home/ProcessSection';
 import CTASection from '../components/home/CTASection';
-import { CheckCircle2, ShieldCheck, Zap, GitBranch, Cpu, Lock } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, Zap, GitBranch, Cpu, Lock, Sparkles } from 'lucide-react';
+import { api } from '../services/api';
 
-const standards = [
+const defaultStandards = [
   {
     icon: Zap,
     title: 'Sub-Second Page Loads',
@@ -26,7 +27,32 @@ const standards = [
   }
 ];
 
+const stdIconMap = {
+  Zap,
+  GitBranch,
+  Lock,
+  Cpu,
+  ShieldCheck,
+  CheckCircle2,
+  Sparkles
+};
+
 const ProcessPage = () => {
+  const [standards, setStandards] = useState(defaultStandards);
+
+  useEffect(() => {
+    const loadProcessData = async () => {
+      try {
+        const res = await api.getPageContent('process');
+        if (res.success && res.data?.standards && res.data.standards.length > 0) {
+          setStandards(res.data.standards);
+        }
+      } catch (err) {
+        console.error('Error fetching process standards:', err);
+      }
+    };
+    loadProcessData();
+  }, []);
   return (
     <div className="w-full">
       {/* Hero */}
@@ -65,7 +91,7 @@ const ProcessPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {standards.map((st, sIdx) => {
-              const Icon = st.icon;
+              const Icon = typeof st.icon === 'string' ? (stdIconMap[st.icon] || Sparkles) : (st.icon || Sparkles);
               return (
                 <div key={sIdx} className="p-8 rounded-3xl bg-white border border-neutral-200/80 shadow-xs hover:shadow-lg transition-all">
                   <div className="w-12 h-12 rounded-2xl bg-neutral-100 flex items-center justify-center text-black mb-6">

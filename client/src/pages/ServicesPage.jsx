@@ -143,28 +143,6 @@ const ServicesPage = () => {
               );
             })}
           </div>
-
-          {/* Other Services Callout Banner */}
-          <div className="mt-20 p-8 sm:p-12 rounded-3xl bg-neutral-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 border border-neutral-800 shadow-2xl">
-            <div className="max-w-xl text-center md:text-left">
-              <span className="text-xs uppercase font-mono tracking-widest text-amber-300 font-bold block mb-2">
-                Specialized Enterprise Solutions
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                Need Cloud DevOps, Custom AI, or Cyber Security?
-              </h3>
-              <p className="text-neutral-400 text-xs sm:text-sm mt-1 leading-relaxed">
-                Explore our extended technology offerings including Kubernetes infrastructure, LLM integrations, vulnerability testing, and 24/7 managed SLA support.
-              </p>
-            </div>
-            <Link
-              to="/other-services"
-              className="px-7 py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-black font-bold text-sm transition-colors shrink-0 inline-flex items-center gap-2 shadow-md cursor-pointer"
-            >
-              <span>Explore Other Services</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 

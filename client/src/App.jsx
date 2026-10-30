@@ -6,6 +6,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
 import GlobalModalEscapeHandler from './components/common/GlobalModalEscapeHandler';
+import { ToastProvider } from './context/ToastContext';
 
 // Public Pages
 import HomePage from './pages/HomePage';
@@ -40,31 +41,33 @@ const PublicLayout = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <GlobalModalEscapeHandler />
-      <ScrollToTop />
-      <Routes>
-        {/* Public Website Routes */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/services/:slug" element={<ServiceDetailPage />} />
-          <Route path="/other-services" element={<OtherServicesPage />} />
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/portfolio/:slug" element={<ProjectDetailPage />} />
-          <Route path="/process" element={<ProcessPage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/careers" element={<CareersPage />} />
-          <Route path="/programs" element={<ProgramsPage />} />
-          <Route path="/programs/:id" element={<ProgramDetailPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ToastProvider>
+      <BrowserRouter>
+        <GlobalModalEscapeHandler />
+        <ScrollToTop />
+        <Routes>
+          {/* Public Website Routes */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/services/:slug" element={<ServiceDetailPage />} />
+            <Route path="/other-services" element={<OtherServicesPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/portfolio/:slug" element={<ProjectDetailPage />} />
+            <Route path="/process" element={<ProcessPage />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/careers" element={<CareersPage />} />
+            <Route path="/programs" element={<ProgramsPage />} />
+            <Route path="/programs/:id" element={<ProgramDetailPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
 

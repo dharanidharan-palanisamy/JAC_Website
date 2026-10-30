@@ -114,6 +114,25 @@ const getProcessSteps = async (req, res, next) => {
   }
 };
 
+const createProcessStep = async (req, res, next) => {
+  try {
+    const { step, title, summary, details, icon } = req.body;
+    const newStepNum = step || String(mockStore.processSteps.length + 1).padStart(2, '0');
+    const newStep = {
+      _id: 'proc-' + Date.now(),
+      step: newStepNum,
+      title: title || 'New Delivery Phase',
+      icon: icon || 'Compass',
+      summary: summary || '',
+      details: Array.isArray(details) ? details : []
+    };
+    mockStore.processSteps.push(newStep);
+    return res.status(201).json({ success: true, data: newStep });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateProcessStep = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -128,6 +147,68 @@ const updateProcessStep = async (req, res, next) => {
   }
 };
 
+const deleteProcessStep = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const index = mockStore.processSteps.findIndex(s => s._id === id || s.step === id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, message: 'Process step not found' });
+    }
+    mockStore.processSteps.splice(index, 1);
+    return res.status(200).json({ success: true, message: 'Process step deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Engineering Standards CRUD
+const createEngineeringStandard = async (req, res, next) => {
+  try {
+    const { title, desc, icon } = req.body;
+    const newStd = {
+      _id: 'std-' + Date.now(),
+      icon: icon || 'Zap',
+      title: title || 'New Engineering Standard',
+      desc: desc || ''
+    };
+    if (!mockStore.engineeringStandards) {
+      mockStore.engineeringStandards = [];
+    }
+    mockStore.engineeringStandards.push(newStd);
+    return res.status(201).json({ success: true, data: newStd });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateEngineeringStandard = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const index = (mockStore.engineeringStandards || []).findIndex(s => s._id === id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, message: 'Engineering standard not found' });
+    }
+    mockStore.engineeringStandards[index] = { ...mockStore.engineeringStandards[index], ...req.body };
+    return res.status(200).json({ success: true, data: mockStore.engineeringStandards[index] });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteEngineeringStandard = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const index = (mockStore.engineeringStandards || []).findIndex(s => s._id === id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, message: 'Engineering standard not found' });
+    }
+    mockStore.engineeringStandards.splice(index, 1);
+    return res.status(200).json({ success: true, message: 'Engineering standard deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getPageContent,
   updatePageContent,
@@ -136,5 +217,10 @@ module.exports = {
   updateIndustry,
   deleteIndustry,
   getProcessSteps,
-  updateProcessStep
+  createProcessStep,
+  updateProcessStep,
+  deleteProcessStep,
+  createEngineeringStandard,
+  updateEngineeringStandard,
+  deleteEngineeringStandard
 };

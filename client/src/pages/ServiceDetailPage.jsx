@@ -3,9 +3,17 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, HelpCircle, Send, Check } from 'lucide-react';
 import { api } from '../services/api';
 
+const defaultBudgetOptions = [
+  'Under ₹50,000',
+  '₹50,000 - ₹1,00,000',
+  '₹1,00,000 - ₹2,50,000',
+  '₹2,50,000+'
+];
+
 const ServiceDetailPage = () => {
   const { slug } = useParams();
   const [service, setService] = useState(null);
+  const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,15 +28,35 @@ const ServiceDetailPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const activeBudgetOptions =
+    settings?.budgetOptions && settings.budgetOptions.length > 0
+      ? settings.budgetOptions
+      : defaultBudgetOptions;
+
   useEffect(() => {
-    const fetchService = async () => {
+    const fetchServiceAndSettings = async () => {
       setLoading(true);
       try {
-        const res = await api.getServiceBySlug(slug);
-        if (res.success && res.data) {
-          setService(res.data);
+        const [serviceRes, settingsRes] = await Promise.allSettled([
+          api.getServiceBySlug(slug),
+          api.getSettings()
+        ]);
+
+        if (serviceRes.status === 'fulfilled' && serviceRes.value.success && serviceRes.value.data) {
+          setService(serviceRes.value.data);
         } else {
           setError('Service not found');
+        }
+
+        if (settingsRes.status === 'fulfilled' && settingsRes.value.success && settingsRes.value.data) {
+          const s = settingsRes.value.data;
+          setSettings(s);
+          if (s.budgetOptions && s.budgetOptions.length > 0) {
+            setFormData((prev) => ({
+              ...prev,
+              budget: s.budgetOptions[1] || s.budgetOptions[0]
+            }));
+          }
         }
       } catch (err) {
         setError('Error loading service');
@@ -36,7 +64,7 @@ const ServiceDetailPage = () => {
         setLoading(false);
       }
     };
-    fetchService();
+    fetchServiceAndSettings();
   }, [slug]);
 
   const handleSubmit = async (e) => {
@@ -247,10 +275,9 @@ const ServiceDetailPage = () => {
                         onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                         className="w-full px-4 py-2.5 rounded-xl bg-neutral-800 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-300"
                       >
-                        <option value="Under ₹50,000">Under ₹50,000</option>
-                        <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
-                        <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
-                        <option value="₹2,50,000+">₹2,50,000+</option>
+                        {activeBudgetOptions.map((opt) => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
                       </select>
                     </div>
 

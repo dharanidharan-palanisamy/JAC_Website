@@ -34,6 +34,7 @@ const AdminProducts = () => {
     description: '',
     icon: 'Layers',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     features: 'Multi-entity accounting and automated tax compliance\nReal-time inventory sync across multiple warehouses\nRole-based granular access control & SOC2 compliant audit logs',
     statMetric: '99.99%',
     statLabel: 'Uptime Reliability',
@@ -81,6 +82,7 @@ const AdminProducts = () => {
       description: prod.description || '',
       icon: prod.icon || 'Layers',
       image: prod.image || '',
+      videoUrl: prod.videoUrl || '',
       features: (prod.features || []).join('\n'),
       statMetric: prod.stats?.metric || '99.9%',
       statLabel: prod.stats?.label || 'Uptime',
@@ -103,6 +105,7 @@ const AdminProducts = () => {
         description: formData.description,
         icon: formData.icon,
         image: formData.image,
+        videoUrl: formData.videoUrl,
         features: formData.features.split('\n').map((f) => f.trim()).filter(Boolean),
         stats: {
           metric: formData.statMetric,
@@ -451,6 +454,19 @@ const AdminProducts = () => {
                 onChange={(newImg) => setFormData({ ...formData, image: newImg })}
                 hint="Drag & drop product dashboard screenshot or feature graphic"
               />
+
+              <div>
+                <label className="block text-xs font-medium text-neutral-700 mb-1.5">
+                  Demo Video URL (Direct MP4 or YouTube Link)
+                </label>
+                <input
+                  type="url"
+                  value={formData.videoUrl}
+                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                  placeholder="e.g. https://.../demo.mp4 or https://youtube.com/watch?v=..."
+                  className="w-full bg-white border border-neutral-300 rounded-xl px-4 py-2.5 text-neutral-950 text-sm focus:outline-none focus:border-black font-mono text-xs"
+                />
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center pt-2">
                 <div>

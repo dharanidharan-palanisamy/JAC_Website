@@ -3,14 +3,17 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const categories = ['All', 'Web Development', 'App Development', 'UI/UX Design'];
-
 const FeaturedProjects = ({ projects = [] }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
 
+  const categories = [
+    'All',
+    ...Array.from(new Set(projects.map((p) => p.category).filter(Boolean)))
+  ];
+
   const filtered = selectedCategory === 'All'
     ? projects
-    : projects.filter(p => p.category === selectedCategory);
+    : projects.filter((p) => (p.category || '').toLowerCase() === selectedCategory.toLowerCase());
 
   return (
     <section className="py-24 sm:py-32 bg-[#FBFBFA]">

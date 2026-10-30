@@ -1,3 +1,5 @@
+import { showToast } from '../context/ToastContext';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const getHeaders = (includeAuth = false) => {
@@ -11,6 +13,22 @@ const getHeaders = (includeAuth = false) => {
     }
   }
   return headers;
+};
+
+const handleMutation = async (promise, successMsg, successTitle = 'Submitted Successfully!') => {
+  try {
+    const res = await promise;
+    const data = await res.json();
+    if (data && data.success) {
+      showToast(successMsg, successTitle, 'success');
+    } else {
+      showToast(data?.message || 'Submission could not be completed.', 'Error', 'error');
+    }
+    return data;
+  } catch (err) {
+    showToast('Failed to connect to server. Please try again.', 'Network Error', 'error');
+    throw err;
+  }
 };
 
 export const api = {
@@ -122,12 +140,15 @@ export const api = {
 
   // Contact / Enquiries
   submitEnquiry: async (enquiryData) => {
-    const res = await fetch(`${API_BASE}/enquiries`, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(enquiryData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/enquiries`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(enquiryData)
+      }),
+      'Thank you! Your message has been received. Our team will get back to you promptly.',
+      'Inquiry Sent Successfully'
+    );
   },
 
   getEnquiries: async (params = {}) => {
@@ -257,12 +278,15 @@ export const api = {
   },
 
   submitApplication: async (applicationData) => {
-    const res = await fetch(`${API_BASE}/careers/apply`, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(applicationData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/apply`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(applicationData)
+      }),
+      'Your job application has been submitted successfully! We will review your profile and reach out.',
+      'Application Submitted'
+    );
   },
 
 

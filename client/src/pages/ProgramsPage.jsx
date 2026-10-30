@@ -23,14 +23,12 @@ const iconMap = {
   incubation: Layers,
   fullstack: Code2,
   'executive-ai': Cpu,
-  'campus-accelerator': GraduationCap
+  'campus-accelerator': GraduationCap,
+  Layers,
+  Code2,
+  Cpu,
+  GraduationCap
 };
-
-const filterCategories = [
-  'All',
-  'Enterprise & Startups',
-  'Talent & Upskilling'
-];
 
 const ProgramsPage = () => {
   const [programs, setPrograms] = useState(programsData);
@@ -40,7 +38,7 @@ const ProgramsPage = () => {
     const fetchPrograms = async () => {
       try {
         const res = await api.getPrograms();
-        if (res.success && res.data && res.data.length > 0) {
+        if (res.success && Array.isArray(res.data) && res.data.length > 0) {
           setPrograms(res.data);
         }
       } catch (err) {
@@ -51,13 +49,19 @@ const ProgramsPage = () => {
   }, []);
 
   const availablePrograms = programs.filter((p) => {
+    if (p.isActive === false) return false;
     const tag = (p.tag || '').toLowerCase();
     return !tag.includes('executive') && !tag.includes('leadership') && !tag.includes('academic');
   });
 
+  const filterCategories = [
+    'All',
+    ...Array.from(new Set(availablePrograms.map((p) => p.tag).filter(Boolean)))
+  ];
+
   const filteredPrograms = selectedCategory === 'All'
     ? availablePrograms
-    : availablePrograms.filter((p) => (p.tag || '').toLowerCase().includes(selectedCategory.toLowerCase()));
+    : availablePrograms.filter((p) => (p.tag || '').toLowerCase() === selectedCategory.toLowerCase());
 
   return (
     <div className="w-full bg-[#FBFBFA]">
@@ -133,10 +137,10 @@ const ProgramsPage = () => {
         {/* Program Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredPrograms.map((p) => {
-            const Icon = iconMap[p.id] || iconMap[p.slug] || Layers;
+            const Icon = typeof p.icon === 'string' ? (iconMap[p.icon] || iconMap[p.id] || Layers) : (p.icon || iconMap[p.id] || Layers);
             return (
               <div
-                key={p.id || p._id}
+                key={p._id || p.id || p.slug}
                 className="group p-8 sm:p-10 rounded-3xl bg-white border border-neutral-200/80 shadow-xs hover:shadow-xl hover:border-neutral-400 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="space-y-6">
@@ -165,11 +169,11 @@ const ProgramsPage = () => {
                   <div className="grid grid-cols-2 gap-3 py-4 border-y border-neutral-100 text-xs">
                     <div>
                       <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider block">Duration</span>
-                      <span className="font-semibold text-neutral-900 mt-0.5 block">{p.duration}</span>
+                      <span className="font-semibold text-neutral-900 mt-0.5 block">{p.duration || 'Flexible'}</span>
                     </div>
                     <div>
                       <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider block">Format</span>
-                      <span className="font-semibold text-neutral-900 mt-0.5 block truncate">{p.format}</span>
+                      <span className="font-semibold text-neutral-900 mt-0.5 block truncate">{p.format || 'Hybrid'}</span>
                     </div>
                   </div>
 
@@ -194,7 +198,7 @@ const ProgramsPage = () => {
                 {/* Card Actions */}
                 <div className="pt-8 mt-8 border-t border-neutral-100 flex items-center justify-between gap-4">
                   <Link
-                    to={`/programs/${p.slug || p.id}`}
+                    to={`/programs/${p.slug || p._id || p.id}`}
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-950 text-white text-xs sm:text-sm font-semibold hover:bg-neutral-800 transition-all shadow-xs cursor-pointer"
                   >
                     <span>View Program Details</span>

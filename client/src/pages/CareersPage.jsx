@@ -182,10 +182,10 @@ const CareersPage = () => {
           api.getCareers(),
           api.getPerks()
         ]);
-        if (jobsRes.success && jobsRes.data && jobsRes.data.length > 0) {
-          setOpenJobs(jobsRes.data);
+        if (jobsRes.success && Array.isArray(jobsRes.data) && jobsRes.data.length > 0) {
+          setOpenJobs(jobsRes.data.filter((j) => j.isActive !== false));
         }
-        if (perksRes.success && perksRes.data && perksRes.data.length > 0) {
+        if (perksRes.success && Array.isArray(perksRes.data) && perksRes.data.length > 0) {
           setPerks(perksRes.data);
         }
       } catch (err) {
@@ -195,11 +195,14 @@ const CareersPage = () => {
     loadCareers();
   }, []);
 
-  const departments = ['All', 'Engineering', 'Design', 'Mobile', 'Cloud & Infrastructure'];
+  const departments = [
+    'All',
+    ...Array.from(new Set(openJobs.map((j) => j.department).filter(Boolean)))
+  ];
 
   const filteredJobs = selectedDept === 'All'
     ? openJobs
-    : openJobs.filter((j) => (j.department || '').toLowerCase().includes(selectedDept.toLowerCase()));
+    : openJobs.filter((j) => (j.department || '').toLowerCase() === selectedDept.toLowerCase() || (j.department || '').toLowerCase().includes(selectedDept.toLowerCase()));
 
   const handleResumeFile = (file) => {
     if (!file) return;
@@ -429,9 +432,9 @@ const CareersPage = () => {
 
           {/* Job Cards */}
           <div className="space-y-6">
-            {filteredJobs.map((job) => (
+            {filteredJobs.map((job, idx) => (
               <div
-                key={job.id}
+                key={job._id || job.id || idx}
                 className="p-6 sm:p-8 rounded-3xl bg-white border border-neutral-200/80 shadow-xs hover:shadow-lg transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-6"
               >
                 <div className="max-w-2xl">

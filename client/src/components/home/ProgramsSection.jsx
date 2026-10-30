@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ChevronLeft, 
@@ -13,8 +13,9 @@ import {
   CheckCircle2,
   Users
 } from 'lucide-react';
+import { api } from '../../services/api';
 
-const programs = [
+const defaultPrograms = [
   {
     id: 'incubation',
     tag: 'ENTERPRISE & STARTUPS',
@@ -89,8 +90,34 @@ const programs = [
   }
 ];
 
+const iconMap = {
+  Layers,
+  Code2,
+  Cpu,
+  GraduationCap
+};
+
 const ProgramsSection = () => {
+  const [programs, setPrograms] = useState(defaultPrograms);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const loadPrograms = async () => {
+      try {
+        const res = await api.getPrograms();
+        if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setPrograms(res.data.filter((p) => p.isActive !== false));
+        }
+      } catch (err) {
+        console.error('Error fetching programs for homepage:', err);
+      }
+    };
+    loadPrograms();
+  }, []);
+
+  const safeIndex = Math.min(currentIndex, Math.max(0, programs.length - 1));
+  const current = programs[safeIndex] || defaultPrograms[0];
+  const IconComponent = typeof current?.icon === 'string' ? (iconMap[current.icon] || Layers) : (current?.icon || Layers);
 
   const prev = () => {
     setCurrentIndex((prevIdx) => (prevIdx === 0 ? programs.length - 1 : prevIdx - 1));
@@ -100,25 +127,19 @@ const ProgramsSection = () => {
     setCurrentIndex((prevIdx) => (prevIdx === programs.length - 1 ? 0 : prevIdx + 1));
   };
 
-  const current = programs[currentIndex];
-  const IconComponent = current.icon;
-
   return (
     <section className="py-24 sm:py-32 bg-[#FBFBFA]" id="programs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <Link
-            to="/programs"
-            className="inline-flex items-center gap-2 group mb-4 cursor-pointer"
-            title="Click to view all programs"
-          >
-            <span className="font-serif-italic font-normal text-2xl sm:text-3xl text-neutral-800">Our</span>{' '}
-            <span className="font-sans font-extrabold uppercase tracking-widest text-lg sm:text-xl md:text-2xl text-neutral-900 group-hover:text-black border-b-2 border-neutral-900/40 group-hover:border-neutral-900 transition-all pb-0.5">
+          <div className="inline-flex items-baseline justify-center gap-2.5 mb-4">
+            <span className="font-serif-italic font-normal text-2xl sm:text-3xl md:text-4xl text-neutral-800">
+              Our
+            </span>
+            <span className="font-sans font-extrabold uppercase tracking-widest text-xl sm:text-2xl md:text-3xl text-neutral-900">
               Programs
             </span>
-            <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-800 group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </Link>
+          </div>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.15]">
             Empowering talent &amp;{' '}
             <span className="font-serif-italic font-normal text-neutral-800">
@@ -182,7 +203,7 @@ const ProgramsSection = () => {
                   <Sparkles className="w-3.5 h-3.5" /> Key Focus
                 </div>
                 <div className="text-xs text-neutral-200 line-clamp-2 mt-0.5">
-                  {current.highlights[0]}
+                  {current.highlights && current.highlights.length > 0 ? current.highlights[0] : (current.summary || 'Enterprise engineering & incubation')}
                 </div>
               </div>
             </div>
@@ -191,7 +212,7 @@ const ProgramsSection = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-6 border-t border-white/15">
               <div className="flex items-center gap-4">
                 <Link
-                  to={`/programs/${current.id}`}
+                  to={`/programs/${current.slug || current.id || current._id}`}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-neutral-900 font-semibold text-sm hover:bg-neutral-100 hover:scale-105 active:scale-95 transition-all shadow-lg"
                 >
                   View Program Details

@@ -19,6 +19,7 @@ const AdminPortfolio = () => {
     category: 'Web Development',
     summary: '',
     challenge: '',
+    
     solution: '',
     year: '2025',
     liveUrl: 'https://jacmedialand.com',

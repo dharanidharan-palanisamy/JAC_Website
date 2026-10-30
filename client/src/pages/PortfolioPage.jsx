@@ -4,8 +4,6 @@ import { ArrowRight } from 'lucide-react';
 import { api } from '../services/api';
 import CTASection from '../components/home/CTASection';
 
-const categories = ['All', 'Web Development', 'App Development', 'UI/UX Design', 'Digital Marketing'];
-
 const PortfolioPage = () => {
   const [projects, setProjects] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -15,8 +13,8 @@ const PortfolioPage = () => {
     const fetchProjects = async () => {
       try {
         const res = await api.getProjects();
-        if (res.success) {
-          setProjects(res.data);
+        if (res.success && Array.isArray(res.data)) {
+          setProjects(res.data.filter((p) => p.isPublished !== false));
         }
       } catch (err) {
         console.error('Error fetching projects:', err);
@@ -27,9 +25,14 @@ const PortfolioPage = () => {
     fetchProjects();
   }, []);
 
+  const categories = [
+    'All',
+    ...Array.from(new Set(projects.map((p) => p.category).filter(Boolean)))
+  ];
+
   const filtered = selectedCategory === 'All'
     ? projects
-    : projects.filter(p => p.category === selectedCategory);
+    : projects.filter((p) => (p.category || '').toLowerCase() === selectedCategory.toLowerCase());
 
   return (
     <div className="w-full">

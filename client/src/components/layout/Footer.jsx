@@ -110,7 +110,7 @@ const Footer = () => {
           <div>
             <h4 className="text-xs uppercase tracking-widest text-white mb-4 flex items-center gap-1.5 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              <span className="font-serif-italic capitalize text-sm font-normal text-neutral-300">Quick</span> <span className="font-sans font-bold">Menu</span>
+              <span className="font-sans font-bold">Menu</span>
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-neutral-400">
               <li>

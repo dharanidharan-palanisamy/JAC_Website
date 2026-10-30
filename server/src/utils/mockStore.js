@@ -434,7 +434,13 @@ let settings = {
     happyClients: '98%',
     yearsExperience: '8+',
     expertDevelopers: '25+'
-  }
+  },
+  budgetOptions: [
+    'Under ₹50,000',
+    '₹50,000 - ₹1,00,000',
+    '₹1,00,000 - ₹2,50,000',
+    '₹2,50,000+'
+  ]
 };
 
 let products = [
@@ -456,6 +462,7 @@ let products = [
       'Custom workflow automation and API webhook integrations'
     ],
     stats: { metric: '42%', label: 'Efficiency Improvement' },
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     order: 1,
     isActive: true
   },
@@ -477,6 +484,7 @@ let products = [
       'Direct reconciliation integration with QuickBooks & SAP'
     ],
     stats: { metric: '99.99%', label: 'Uptime Reliability' },
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     order: 2,
     isActive: true
   },
@@ -498,6 +506,7 @@ let products = [
       'Automated email nurture sequences and trigger-based tasks'
     ],
     stats: { metric: '3.4x', label: 'Faster Deal Velocity' },
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
     order: 3,
     isActive: true
   },
@@ -519,6 +528,7 @@ let products = [
       'Instant cloud syncing with offline caching'
     ],
     stats: { metric: '100%', label: 'Compliance Audit Pass' },
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
     order: 4,
     isActive: true
   }

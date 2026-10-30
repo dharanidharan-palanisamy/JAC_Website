@@ -45,6 +45,15 @@ const WebsiteSettingsSchema = new mongoose.Schema({
     happyClients: { type: String, default: '98%' },
     yearsExperience: { type: String, default: '8+' },
     expertDevelopers: { type: String, default: '25+' }
+  },
+  budgetOptions: {
+    type: [String],
+    default: [
+      'Under ₹50,000',
+      '₹50,000 - ₹1,00,000',
+      '₹1,00,000 - ₹2,50,000',
+      '₹2,50,000+'
+    ]
   }
 }, {
   timestamps: true

@@ -149,8 +149,8 @@ const OtherServicesPage = () => {
     const loadServices = async () => {
       try {
         const res = await api.getOtherServices();
-        if (res.success && res.data && res.data.length > 0) {
-          setServices(res.data);
+        if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setServices(res.data.filter((s) => s.isActive !== false));
         }
       } catch (err) {
         console.error('Failed to load other services, using default:', err);
@@ -199,7 +199,7 @@ const OtherServicesPage = () => {
               href="#catalog"
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-black text-white text-xs sm:text-sm font-semibold hover:bg-neutral-800 transition-colors shadow-xs"
             >
-              <span>Explore All 6 Extended Services</span>
+              <span>Explore All {services.length} Extended Services</span>
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>
@@ -254,7 +254,7 @@ const OtherServicesPage = () => {
                       <span className="text-[11px] font-mono uppercase text-neutral-400 font-bold block mb-2">
                         Key Capabilities:
                       </span>
-                      {service.deliverables.slice(0, 3).map((item, dIdx) => (
+                      {(service.deliverables || []).slice(0, 3).map((item, dIdx) => (
                         <div key={dIdx} className="flex items-start gap-2 text-xs text-neutral-700">
                           <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                           <span>{item}</span>

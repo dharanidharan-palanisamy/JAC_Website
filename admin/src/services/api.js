@@ -1,3 +1,5 @@
+import { showToast } from '../context/ToastContext';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const getHeaders = (includeAuth = false) => {
@@ -11,6 +13,22 @@ const getHeaders = (includeAuth = false) => {
     }
   }
   return headers;
+};
+
+const handleMutation = async (promise, successMsg, successTitle = 'Saved Successfully!') => {
+  try {
+    const res = await promise;
+    const data = await res.json();
+    if (data && data.success) {
+      showToast(successMsg, successTitle, 'success');
+    } else {
+      showToast(data?.message || 'Action could not be completed.', 'Action Failed', 'error');
+    }
+    return data;
+  } catch (err) {
+    showToast('Failed to connect to server. Please try again.', 'Network Error', 'error');
+    throw err;
+  }
 };
 
 export const api = {
@@ -50,29 +68,38 @@ export const api = {
   },
 
   createService: async (serviceData) => {
-    const res = await fetch(`${API_BASE}/services`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(serviceData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/services`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(serviceData)
+      }),
+      'Core service created and published to website!',
+      'Service Created'
+    );
   },
 
   updateService: async (id, serviceData) => {
-    const res = await fetch(`${API_BASE}/services/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(serviceData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/services/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(serviceData)
+      }),
+      'Core service updated and saved live!',
+      'Service Saved'
+    );
   },
 
   deleteService: async (id) => {
-    const res = await fetch(`${API_BASE}/services/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/services/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Core service removed successfully.',
+      'Service Deleted'
+    );
   },
 
   // Projects / Portfolio
@@ -95,39 +122,51 @@ export const api = {
   },
 
   createProject: async (projectData) => {
-    const res = await fetch(`${API_BASE}/projects`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(projectData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/projects`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(projectData)
+      }),
+      'Portfolio project created and published to website!',
+      'Project Created'
+    );
   },
 
   updateProject: async (id, projectData) => {
-    const res = await fetch(`${API_BASE}/projects/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(projectData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/projects/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(projectData)
+      }),
+      'Portfolio project updated and saved live!',
+      'Project Saved'
+    );
   },
 
   deleteProject: async (id) => {
-    const res = await fetch(`${API_BASE}/projects/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/projects/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Portfolio project removed successfully.',
+      'Project Deleted'
+    );
   },
 
   // Contact / Enquiries
   submitEnquiry: async (enquiryData) => {
-    const res = await fetch(`${API_BASE}/enquiries`, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(enquiryData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/enquiries`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(enquiryData)
+      }),
+      'Your inquiry has been submitted! Our team will contact you shortly.',
+      'Inquiry Submitted'
+    );
   },
 
   getEnquiries: async (params = {}) => {
@@ -139,20 +178,26 @@ export const api = {
   },
 
   updateEnquiryStatus: async (id, data) => {
-    const res = await fetch(`${API_BASE}/enquiries/${id}`, {
-      method: 'PATCH',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/enquiries/${id}`, {
+        method: 'PATCH',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Client enquiry notes and status updated successfully!',
+      'Enquiry Updated'
+    );
   },
 
   deleteEnquiry: async (id) => {
-    const res = await fetch(`${API_BASE}/enquiries/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/enquiries/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Client enquiry record removed successfully.',
+      'Enquiry Deleted'
+    );
   },
 
   // Settings
@@ -162,12 +207,15 @@ export const api = {
   },
 
   updateSettings: async (settingsData) => {
-    const res = await fetch(`${API_BASE}/settings`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(settingsData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/settings`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(settingsData)
+      }),
+      'Website configuration saved and live across the website!',
+      'Settings Saved'
+    );
   },
 
   // FAQs
@@ -184,29 +232,38 @@ export const api = {
   },
 
   createFAQ: async (faqData) => {
-    const res = await fetch(`${API_BASE}/faqs`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(faqData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/faqs`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(faqData)
+      }),
+      'FAQ question created and published!',
+      'FAQ Created'
+    );
   },
 
   updateFAQ: async (id, faqData) => {
-    const res = await fetch(`${API_BASE}/faqs/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(faqData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/faqs/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(faqData)
+      }),
+      'FAQ question updated and saved live!',
+      'FAQ Saved'
+    );
   },
 
   deleteFAQ: async (id) => {
-    const res = await fetch(`${API_BASE}/faqs/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/faqs/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'FAQ item removed successfully.',
+      'FAQ Deleted'
+    );
   },
 
   // Stats
@@ -236,29 +293,38 @@ export const api = {
   },
 
   createProduct: async (productData) => {
-    const res = await fetch(`${API_BASE}/products`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(productData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/products`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(productData)
+      }),
+      'Product created and published to product catalog!',
+      'Product Created'
+    );
   },
 
   updateProduct: async (id, productData) => {
-    const res = await fetch(`${API_BASE}/products/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(productData)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/products/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(productData)
+      }),
+      'Product updated and saved live!',
+      'Product Saved'
+    );
   },
 
   deleteProduct: async (id) => {
-    const res = await fetch(`${API_BASE}/products/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/products/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Product removed successfully from catalog.',
+      'Product Deleted'
+    );
   },
 
   // Other Services
@@ -275,29 +341,38 @@ export const api = {
   },
 
   createOtherService: async (data) => {
-    const res = await fetch(`${API_BASE}/other-services`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/other-services`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Enterprise service created and published!',
+      'Service Created'
+    );
   },
 
   updateOtherService: async (id, data) => {
-    const res = await fetch(`${API_BASE}/other-services/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/other-services/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Enterprise service updated and saved live!',
+      'Service Saved'
+    );
   },
 
   deleteOtherService: async (id) => {
-    const res = await fetch(`${API_BASE}/other-services/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/other-services/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Enterprise service removed successfully.',
+      'Service Deleted'
+    );
   },
 
   // Team
@@ -314,29 +389,38 @@ export const api = {
   },
 
   createTeamMember: async (data) => {
-    const res = await fetch(`${API_BASE}/team`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/team`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Team member added to company roster!',
+      'Team Member Created'
+    );
   },
 
   updateTeamMember: async (id, data) => {
-    const res = await fetch(`${API_BASE}/team/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/team/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Team member profile saved live!',
+      'Profile Updated'
+    );
   },
 
   deleteTeamMember: async (id) => {
-    const res = await fetch(`${API_BASE}/team/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/team/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Team member removed successfully.',
+      'Member Deleted'
+    );
   },
 
   // Careers (Jobs & Perks)
@@ -353,29 +437,38 @@ export const api = {
   },
 
   createJob: async (data) => {
-    const res = await fetch(`${API_BASE}/careers`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Job opening created and published to Careers page!',
+      'Job Opening Created'
+    );
   },
 
   updateJob: async (id, data) => {
-    const res = await fetch(`${API_BASE}/careers/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Job opening updated and saved live!',
+      'Job Opening Saved'
+    );
   },
 
   deleteJob: async (id) => {
-    const res = await fetch(`${API_BASE}/careers/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Job opening removed successfully.',
+      'Job Deleted'
+    );
   },
 
   getPerks: async () => {
@@ -384,29 +477,38 @@ export const api = {
   },
 
   createPerk: async (data) => {
-    const res = await fetch(`${API_BASE}/careers/perks`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/perks`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Company perk created and published!',
+      'Perk Created'
+    );
   },
 
   updatePerk: async (id, data) => {
-    const res = await fetch(`${API_BASE}/careers/perks/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/perks/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Company perk updated and saved live!',
+      'Perk Saved'
+    );
   },
 
   deletePerk: async (id) => {
-    const res = await fetch(`${API_BASE}/careers/perks/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/perks/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Company perk removed successfully.',
+      'Perk Deleted'
+    );
   },
 
   // Career Applications
@@ -418,20 +520,26 @@ export const api = {
   },
 
   updateApplicationStatus: async (id, status) => {
-    const res = await fetch(`${API_BASE}/careers/applications/${id}/status`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify({ status })
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/applications/${id}/status`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify({ status })
+      }),
+      'Candidate application status updated successfully!',
+      'Status Saved'
+    );
   },
 
   deleteApplication: async (id) => {
-    const res = await fetch(`${API_BASE}/careers/applications/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/careers/applications/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Application record removed successfully.',
+      'Application Deleted'
+    );
   },
 
 
@@ -447,29 +555,38 @@ export const api = {
   },
 
   createProgram: async (data) => {
-    const res = await fetch(`${API_BASE}/programs`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/programs`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Program created and published to live catalog!',
+      'Program Created'
+    );
   },
 
   updateProgram: async (id, data) => {
-    const res = await fetch(`${API_BASE}/programs/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/programs/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Program details updated and saved live!',
+      'Program Saved'
+    );
   },
 
   deleteProgram: async (id) => {
-    const res = await fetch(`${API_BASE}/programs/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/programs/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Program removed successfully.',
+      'Program Deleted'
+    );
   },
 
   // Page Content (Home, About, Legal, etc.)
@@ -479,12 +596,15 @@ export const api = {
   },
 
   updatePageContent: async (pageKey, data) => {
-    const res = await fetch(`${API_BASE}/content/${pageKey}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/content/${pageKey}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Page content updated and published live across website!',
+      'Content Published'
+    );
   },
 
   // Industries
@@ -494,29 +614,38 @@ export const api = {
   },
 
   createIndustry: async (data) => {
-    const res = await fetch(`${API_BASE}/content/industries`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/content/industries`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Industry focus segment created and published!',
+      'Industry Created'
+    );
   },
 
   updateIndustry: async (id, data) => {
-    const res = await fetch(`${API_BASE}/content/industries/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/content/industries/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Industry focus segment updated and saved live!',
+      'Industry Saved'
+    );
   },
 
   deleteIndustry: async (id) => {
-    const res = await fetch(`${API_BASE}/content/industries/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/content/industries/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Industry focus segment removed successfully.',
+      'Industry Deleted'
+    );
   },
 
   // Process Steps
@@ -525,13 +654,75 @@ export const api = {
     return res.json();
   },
 
+  createProcessStep: async (data) => {
+    return handleMutation(
+      fetch(`${API_BASE}/content/process/step`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'New delivery phase step created and published live!',
+      'Process Step Created'
+    );
+  },
+
   updateProcessStep: async (id, data) => {
-    const res = await fetch(`${API_BASE}/content/process/step/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/content/process/step/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Process methodology step updated and saved live!',
+      'Process Saved'
+    );
+  },
+
+  deleteProcessStep: async (id) => {
+    return handleMutation(
+      fetch(`${API_BASE}/content/process/step/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Process methodology step removed successfully.',
+      'Process Step Deleted'
+    );
+  },
+
+  // Engineering Standards
+  createEngineeringStandard: async (data) => {
+    return handleMutation(
+      fetch(`${API_BASE}/content/process/standard`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'New engineering code standard created and saved live!',
+      'Standard Created'
+    );
+  },
+
+  updateEngineeringStandard: async (id, data) => {
+    return handleMutation(
+      fetch(`${API_BASE}/content/process/standard/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Engineering standard updated and saved live!',
+      'Standard Saved'
+    );
+  },
+
+  deleteEngineeringStandard: async (id) => {
+    return handleMutation(
+      fetch(`${API_BASE}/content/process/standard/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Engineering standard removed successfully.',
+      'Standard Deleted'
+    );
   },
 
   // Client Partner Logos
@@ -548,28 +739,37 @@ export const api = {
   },
 
   createLogo: async (data) => {
-    const res = await fetch(`${API_BASE}/logos`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/logos`, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Partner logo added to showcase!',
+      'Logo Added'
+    );
   },
 
   updateLogo: async (id, data) => {
-    const res = await fetch(`${API_BASE}/logos/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(true),
-      body: JSON.stringify(data)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/logos/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(data)
+      }),
+      'Partner logo updated and saved live!',
+      'Logo Saved'
+    );
   },
 
   deleteLogo: async (id) => {
-    const res = await fetch(`${API_BASE}/logos/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders(true)
-    });
-    return res.json();
+    return handleMutation(
+      fetch(`${API_BASE}/logos/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(true)
+      }),
+      'Partner logo removed successfully.',
+      'Logo Deleted'
+    );
   }
 };

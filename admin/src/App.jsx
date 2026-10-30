@@ -23,13 +23,15 @@ import AdminProcess from './pages/AdminProcess';
 import AdminPrograms from './pages/AdminPrograms';
 import AdminLegal from './pages/AdminLegal';
 import GlobalModalEscapeHandler from './components/GlobalModalEscapeHandler';
+import { ToastProvider } from './context/ToastContext';
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <GlobalModalEscapeHandler />
-        <Routes>
+      <ToastProvider>
+        <BrowserRouter>
+          <GlobalModalEscapeHandler />
+          <Routes>
           {/* Public Login Route */}
           <Route path="/login" element={<AdminLogin />} />
           <Route path="/admin/login" element={<Navigate to="/login" replace />} />
@@ -78,6 +80,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </ToastProvider>
     </AuthProvider>
   );
 }

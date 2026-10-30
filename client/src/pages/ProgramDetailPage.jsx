@@ -24,7 +24,7 @@ const ProgramDetailPage = () => {
   const { id } = useParams();
   
   // Find program by id or slug with API fetch and fallback
-  const [program, setProgram] = useState(() => programsData.find((p) => p.id === id || p.slug === id) || null);
+  const [program, setProgram] = useState(() => programsData.find((p) => p.id === id || p.slug === id || p._id === id) || null);
 
   useEffect(() => {
     const loadProg = async () => {
@@ -32,12 +32,27 @@ const ProgramDetailPage = () => {
         const res = await api.getProgramById(id);
         if (res.success && res.data) {
           setProgram(res.data);
+          return;
         }
       } catch (err) {
-        // Fallback to static data
-        const local = programsData.find((p) => p.id === id || p.slug === id);
-        if (local) setProgram(local);
+        // Continue to fallback
       }
+
+      try {
+        const allRes = await api.getPrograms();
+        if (allRes.success && Array.isArray(allRes.data)) {
+          const match = allRes.data.find((p) => p._id === id || p.slug === id || p.id === id);
+          if (match) {
+            setProgram(match);
+            return;
+          }
+        }
+      } catch (err) {
+        // Continue to local data
+      }
+
+      const local = programsData.find((p) => p.id === id || p.slug === id || p._id === id);
+      if (local) setProgram(local);
     };
     loadProg();
   }, [id]);

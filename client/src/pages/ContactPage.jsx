@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Send, CheckCircle2, Mail, Phone, MapPin, Clock, ArrowRight, AlertCircle } from 'lucide-react';
 import { api } from '../services/api';
 
-const servicesOptions = [
+const defaultServicesOptions = [
   'Web Development',
   'Mobile App Development',
   'UI/UX Design',
@@ -12,7 +12,7 @@ const servicesOptions = [
   'General Inquiry'
 ];
 
-const budgetOptions = [
+const defaultBudgetOptions = [
   'Under ₹50,000',
   '₹50,000 - ₹1,00,000',
   '₹1,00,000 - ₹2,50,000',
@@ -20,6 +20,8 @@ const budgetOptions = [
 ];
 
 const ContactPage = () => {
+  const [settings, setSettings] = useState(null);
+  const [servicesList, setServicesList] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,6 +34,48 @@ const ContactPage = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const activeBudgetOptions =
+    settings?.budgetOptions && settings.budgetOptions.length > 0
+      ? settings.budgetOptions
+      : defaultBudgetOptions;
+
+  const activeServicesOptions =
+    servicesList.length > 0
+      ? [...servicesList.map(s => s.title), 'General Inquiry']
+      : defaultServicesOptions;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [setRes, srvRes] = await Promise.all([
+          api.getSettings(),
+          api.getServices()
+        ]);
+
+        if (srvRes.success && Array.isArray(srvRes.data) && srvRes.data.length > 0) {
+          setServicesList(srvRes.data);
+          setFormData((prev) => ({
+            ...prev,
+            service: srvRes.data[0]?.title || prev.service
+          }));
+        }
+
+        if (setRes.success && setRes.data) {
+          setSettings(setRes.data);
+          if (setRes.data.budgetOptions && setRes.data.budgetOptions.length > 0) {
+            setFormData((prev) => ({
+              ...prev,
+              budget: setRes.data.budgetOptions[1] || setRes.data.budgetOptions[0]
+            }));
+          }
+        }
+      } catch (err) {
+        // Defaults are used as fallbacks
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +91,7 @@ const ContactPage = () => {
           email: '',
           phone: '',
           service: 'Web Development',
-          budget: '₹50,000 - ₹1,00,000',
+          budget: activeBudgetOptions[1] || activeBudgetOptions[0] || '₹50,000 - ₹1,00,000',
           message: ''
         });
       } else {
@@ -108,8 +152,11 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <span className="text-xs text-neutral-400 font-medium block">Email Address</span>
-                    <a href="mailto:contact@jacmedialand.com" className="text-base font-semibold text-black hover:underline">
-                      contact@jacmedialand.com
+                    <a
+                      href={`mailto:${settings?.contactEmail || 'contact@jacmedialand.com'}`}
+                      className="text-base font-semibold text-black hover:underline"
+                    >
+                      {settings?.contactEmail || 'contact@jacmedialand.com'}
                     </a>
                     <span className="text-xs text-neutral-500 block mt-0.5">Average response: &lt; 4 hours</span>
                   </div>
@@ -121,8 +168,11 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <span className="text-xs text-neutral-400 font-medium block">Direct Telephone</span>
-                    <a href="tel:+919876543210" className="text-base font-semibold text-black hover:underline">
-                      +91 98765 43210
+                    <a
+                      href={`tel:${(settings?.contactPhone || '+91 98765 43210').replace(/\s+/g, '')}`}
+                      className="text-base font-semibold text-black hover:underline"
+                    >
+                      {settings?.contactPhone || '+91 98765 43210'}
                     </a>
                     <span className="text-xs text-neutral-500 block mt-0.5">Mon - Fri: 9:00 AM - 7:00 PM IST</span>
                   </div>
@@ -135,7 +185,7 @@ const ContactPage = () => {
                   <div>
                     <span className="text-xs text-neutral-400 font-medium block">Our Locations</span>
                     <p className="text-sm font-semibold text-neutral-900 mt-1">
-                      Tech Innovation Hub, Coimbatore, Tamil Nadu, India
+                      {settings?.address || 'Tech Innovation Hub, Coimbatore, Tamil Nadu, India'}
                     </p>
                     <p className="text-xs text-neutral-600 mt-1">
                       OMR Technology Corridor, Chennai, Tamil Nadu, India
@@ -248,7 +298,7 @@ const ContactPage = () => {
                           onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                           className="w-full px-4 py-3 rounded-xl bg-neutral-50 border border-neutral-300 text-neutral-900 text-sm focus:outline-none focus:border-black focus:bg-white transition-all"
                         >
-                          {servicesOptions.map((opt) => (
+                          {activeServicesOptions.map((opt) => (
                             <option key={opt} value={opt}>{opt}</option>
                           ))}
                         </select>
@@ -260,7 +310,7 @@ const ContactPage = () => {
                         Estimated Budget *
                       </label>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {budgetOptions.map((b) => (
+                        {activeBudgetOptions.map((b) => (
                           <button
                             type="button"
                             key={b}
